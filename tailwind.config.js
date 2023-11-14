@@ -15,6 +15,9 @@ module.exports = {
     extend: {
       colors: {
         'principal-color': "#2E5043"
+      },
+      fontSize: {
+        'layout-title': "3vw"
       }
     },
   },
