@@ -12,7 +12,14 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'principal-color': "#2E5043"
+      },
+      fontSize: {
+        'layout-title': "3vw"
+      }
+    },
   },
   darkMode: "class",
   plugins: [nextui()],
