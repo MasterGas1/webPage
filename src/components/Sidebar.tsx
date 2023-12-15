@@ -17,7 +17,7 @@ const SidebarMenu = () => {
                         src={Logo}
                         alt='Example'
                     />
-                    <span className="text-lg font-medium">MasterGas23</span>
+                    <span className="text-lg font-medium">MasterGas23</span> 
                 </div>
             </div>
             <div className="flex flex-col items-start mt-10">
