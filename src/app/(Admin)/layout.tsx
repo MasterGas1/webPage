@@ -1,10 +1,16 @@
-import React from 'react'
+
+import NavbarAdmin from './components/Navbar/NavbarAdmin';
+import SideMenu from './components/SideMenu/SideMenu';
+
 
 const layout = ({children}:{children: React.ReactNode}) => {
   return (
-    <div>
-        <h1>Hola</h1>
-        {children}
+    <div className='flex flex-row min-h-screen min-w-screen max-w-screen'>
+        <SideMenu/>
+        <div className='w-full'>
+          <NavbarAdmin/>
+          {children}
+        </div>
     </div>
   )
 }
