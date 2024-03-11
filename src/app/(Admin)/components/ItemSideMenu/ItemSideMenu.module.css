@@ -1,0 +1,36 @@
+.containerItem {
+    display: flex;
+    margin-left: 15px;
+    margin-right: 15px;
+    align-items: center;
+    height: 70px;
+    padding: 5px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.containerItem .textItem {
+    font-size: 1.1vw;
+    font-weight: 600;
+    color: var(--principal-color);
+    margin-left: 10px;
+}
+
+.containerItem .icon {
+    font-size: 2vw;
+    font-weight: 600;
+    color: var(--principal-color);
+}
+
+.containerItem:hover {
+    background-color: var(--principal-color);
+    transition: 0.3s;
+}
+
+.containerItem:hover .textItem {
+    color: white;
+}
+
+.containerItem:hover .icon {
+    color: white;
+}

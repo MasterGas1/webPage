@@ -1,0 +1,26 @@
+ .containerSideMenu {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 15vw;
+    max-width: 20vw;
+    background-color: white;
+}
+
+.containerLogo {
+    margin: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.textLogo {
+    margin-left: 10px;
+    font-size: 1.2vw;
+    font-weight: 600;
+    color: var(--principal-color);
+}
+
+.containerItems {
+    margin-top: 10px;
+}

@@ -22,6 +22,9 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+    'tailwindcss/nesting'
+  ],
 }
 

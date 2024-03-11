@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 
-import imageLogo from '../../public/Logo.png'
+import imageLogo from '../../public/LogoMastergas.png'
 
 import { linksLandingPagesData } from "@/data/landingPageData";
 
@@ -42,6 +42,7 @@ export default function Page() {
           </NavbarContent>
         </NavbarContent>
       </Navbar>
+      
       <div className="grid grid-cols-2 gap-4 mt-20">
         <div className="justify-end flex">
           <div className="w-1/2 justify-center flex flex-col">
@@ -61,6 +62,7 @@ export default function Page() {
             src={imageLogo}
             alt="Logo mastergas"
             className="w-3/5 h-auto"
+            priority
           />
         </div>
       </div>
