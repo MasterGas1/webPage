@@ -36,7 +36,7 @@ export default function Page() {
             }
           </NavbarContent>
           <NavbarContent justify="start" >
-            <Button as={Link} className="bg-white text-principal-color font-semibold px-10" href="/">
+            <Button as={Link} className="bg-white text-principal-color font-semibold px-10" href="/register-installer">
                 Registro
             </Button>
           </NavbarContent>
@@ -49,9 +49,9 @@ export default function Page() {
             <h1 className="text-layout-title text-principal-color font-semibold">
               Registra tus instaladores
             </h1>
-            <Button className="bg-principal-color text-white font-semibold w-1/2 mt-20">
+            <Link className="bg-principal-color text-white font-semibold w-1/2 mt-20 h-12 p-4 rounded justify-center" href="/register-installer">
               Registro
-            </Button>
+            </Link>
             <Link className="text-principal-color underline mt-5" href="/">
               Terminos y condiciones
             </Link>

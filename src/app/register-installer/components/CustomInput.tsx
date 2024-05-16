@@ -18,17 +18,16 @@ const CustomInput = ({
   type,
   label,
   errorMessage,
-  patternMatch,
   value,
   onChange,
 }: Props) => {
-  const validateInput = (newValue: string) => newValue.match(patternMatch);
+  //const validateInput = (newValue: string) => newValue.match(patternMatch);
 
   const isInvalid = useMemo(() => {
     if (value === undefined) return false;
     if (value === '') return false;
 
-    return validateInput(value) ? false : true;
+    //return validateInput(value) ? false : true;
   }, [value]);
 
   return (
@@ -42,11 +41,11 @@ const CustomInput = ({
         // color="success-50"
         // className="max-w-lg"
         classNames={{
-          label: 'text-black/50 dark:text-white/90',
+          label: 'text-principal-color dark:text-white/90 text-md',
           input: ['bg-transparent'],
           inputWrapper: [
-            'border-2',
-            'group-data-[focus=true]:border-green-700',
+            'border-3',
+            'group-data-[focus=true]:border-principal-color',
           ],
           innerWrapper: ['bg-transparent'],
         }}

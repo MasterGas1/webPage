@@ -3,13 +3,16 @@ import Form from './components/Form';
 
 const page = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen min-w-full">
-      <section className="w-1/2 h-screen flex justify-center items-center bg-green-950 text-white">
-        <Image width={300} height={300} src="/logo.png" alt="logo" />
-      </section>
-      <section className="w-1/2 h-screen  flex justify-center items-center">
-        <Form />
-      </section>
+    <div className="flex justify-center items-center min-h-screen min-w-full h-screen bg-principal-color p-10">
+     <div className='w-full h-full bg-white rounded-lg flex-row justify-center p-8'>
+
+      <div>
+        <h2 className='text-6xl text-principal-color font-bold text-center'>Bienvenido</h2>
+        <h3 className='text-2xl text-principal-color font-semibold text-center'>REGISTRO DE INSTALADOR</h3>
+      </div>
+
+      <Form/>
+     </div>
     </div>
   );
 };
