@@ -1,4 +1,7 @@
-import Image from 'next/image';
+'use client'
+
+import { ToastContainer } from 'react-toastify';
+
 import Form from './components/Form';
 
 const page = () => {
@@ -13,6 +16,7 @@ const page = () => {
 
       <Form/>
      </div>
+     <ToastContainer autoClose={2000}/>
     </div>
   );
 };

@@ -3,7 +3,6 @@
 import React, { useContext, useEffect } from 'react'
 import { Input, Button, Spinner} from '@nextui-org/react';
 import {ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation';
 
 import { Context as AuthContext } from '@/context/AuthContext';
