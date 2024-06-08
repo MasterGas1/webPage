@@ -8,8 +8,9 @@ type Props = {
   type: string;
   label: string;
   errorMessage: string;
-  patternMatch: string;
-  value: string;
+  patternMatch: RegExp;
+  value: string | any
+  setIsValid: (name: string, value: boolean) => void
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -19,14 +20,27 @@ const CustomInput = ({
   label,
   errorMessage,
   value,
+  patternMatch,
+  setIsValid,
   onChange,
 }: Props) => {
   //const validateInput = (newValue: string) => newValue.match(patternMatch);
 
   const isInvalid = useMemo(() => {
-    if (value === undefined) return false;
-    if (value === '') return false;
-
+    if (value === undefined) {
+      setIsValid(name, false)
+      return false
+    };
+    if (value === '') {
+      setIsValid(name, false)
+      return false;
+    }
+    if (!value.match(patternMatch)) {
+      setIsValid(name, false)
+      return true;
+    } else {
+      setIsValid(name, true)
+    }
     //return validateInput(value) ? false : true;
   }, [value]);
 
