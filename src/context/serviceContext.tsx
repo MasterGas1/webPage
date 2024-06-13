@@ -19,6 +19,7 @@ export type ServicesActions =
     type ServicesContextProps = {
         state: ServiceState,
         getServices: () => void,
+        createService: (body: ServicesInterface) => void
         errorMessage: (message: string) => void
     }
 
@@ -60,4 +61,17 @@ const getServices = (dispatch: Dispatch<ServicesActions>) => async (body: Servic
     }
 }
 
-export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, { getServices }, { services: null, loading: false, errorMessage: null })
+const createService = (dispatch: Dispatch<ServicesActions>) => async (body: ServicesInterface) => {
+    try {
+        dispatch({ type: 'loading' })
+        const { data } = await dbApi.post<ServicesInterface[]>('/service', body);
+        dispatch({ type: 'getServices', payload: { services: data } })
+    } catch (error: any) {
+        if (error.response.data.message) {
+            toast.error(error.response.data.message.split(':')[1])
+            dispatch({ type: 'errorMessage', payload: { errorMessage: error.response.data.message.split(':')[1] } })
+        }
+    }
+}
+
+export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, { getServices, createService }, { services: null, loading: false, errorMessage: null })
