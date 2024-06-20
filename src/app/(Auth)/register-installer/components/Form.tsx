@@ -15,7 +15,7 @@ import Success from './Success';
 
  interface inputInterface {
   id: number,
-  name: | 'name' | 'lastName' | 'rfc' | 'email' | 'companyName' |'phoneNumber' | 'IMSSNumber' | 'employeesNumber' | 'webSite' | 'ownOffice' | 'ownVehicle' | 'state' | 'city' | 'address' | 'specializedTools' | 'certifications' | 'securityCourses' | 'yearsExperiences', 
+  name: | 'name' | 'lastName' | 'rfc' | 'email' | 'companyName' |'phoneNumber' | 'IMSSNumber' | 'employeesNumber' | 'website' | 'ownOffice' | 'ownVehicle' | 'state' | 'city' | 'address' | 'specializedTools' | 'certifications' | 'securityCourses' | 'yearsExperiences', 
   label: string,
   type: string,
   errorMessage: string,
@@ -34,7 +34,7 @@ const formInstallerValues: installersInterface = {
     phoneNumber: '',
     IMSSNumber: '',
     employeesNumber: '',
-    webSite: '',
+    website: '',
     ownOffice: 'false',
     ownVehicle: 'false',
     state: 'Aguascalientes',
@@ -62,7 +62,7 @@ const Form = () => {
     phoneNumber: false,
     IMSSNumber: false,
     employeesNumber: false,
-    webSite: false,
+    website: false,
     address: false,
     specializedTools: false,
     certifications: false,
@@ -140,7 +140,7 @@ const Form = () => {
     },
     {
       id: 9,
-      name: 'webSite',
+      name: 'website',
       type: 'text',
       label: 'URL Sitio web',
       errorMessage: 'Escribe un url valido',

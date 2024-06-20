@@ -35,13 +35,12 @@ const CustomInput = ({
       setIsValid(name, false)
       return false;
     }
-    if (!value.match(patternMatch)) {
+    if (typeof value === 'string' && !value.match(patternMatch)) {
       setIsValid(name, false)
       return true;
     } else {
       setIsValid(name, true)
     }
-    //return validateInput(value) ? false : true;
   }, [value]);
 
   return (
@@ -52,8 +51,6 @@ const CustomInput = ({
         label={label}
         variant="bordered"
         fullWidth={true}
-        // color="success-50"
-        // className="max-w-lg"
         classNames={{
           label: 'text-principal-color dark:text-white/90 text-md',
           input: ['bg-transparent'],
