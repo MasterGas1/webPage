@@ -21,7 +21,7 @@ const Page = () => {
 
   const router = useRouter();
 
-  const {state, signin} = useContext(AuthContext)
+  const {state, signin, getToken} = useContext(AuthContext)
 
   const {onChange, email, password} = useForm({
     email: '',
@@ -38,7 +38,9 @@ const Page = () => {
   }
 
   useEffect(() => {
-    if (state.token && state.role === 'admin') {
+    if (!state.token) {
+      getToken()
+    } else {
       router.push('/dashboard')
     }
   },[state.token])

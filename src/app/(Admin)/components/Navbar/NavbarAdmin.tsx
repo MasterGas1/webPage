@@ -1,9 +1,22 @@
 'use client'
 
+import React, { useContext } from 'react'
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Navbar, NavbarContent } from '@nextui-org/react'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+
+import { Context as AuthContext } from '@/context/AuthContext'
 
 const NavbarAdmin = () => {
+
+    const router = useRouter()
+
+    const {signout} = useContext(AuthContext)
+
+    const handleSignout = () => {
+        signout()
+        router.push('/login-manager')
+    }
+
   return (
     <Navbar className="bg-principal-color px-3" maxWidth='full'>
         <NavbarContent as='div' justify='end'>
@@ -23,8 +36,12 @@ const NavbarAdmin = () => {
                     <p className="font-semibold">Usuario</p>
                     <p className="font-semibold">admin@example.com</p>
                     </DropdownItem>
-                    <DropdownItem key="logout" color="danger">
-                    Log Out
+                    <DropdownItem 
+                        key="logout" 
+                        color="danger"
+                        onClick={handleSignout}
+                    >
+                        Log Out
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>

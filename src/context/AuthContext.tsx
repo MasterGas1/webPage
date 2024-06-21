@@ -16,6 +16,8 @@ export interface AuthState {
 
 export type AuthAction =
     | {type: 'signin', payload: {token: string, role: string}}
+    | {type: 'signout'}
+    | {type: 'getToken', payload: {token: string}}
     | {type: 'loading'}
     | {type: 'errorMessage', payload: {errorMessage: string}}
 
@@ -23,6 +25,8 @@ export type AuthAction =
 type AuthContextProps = {
     state: AuthState,
     signin: (body: LoginInterface) => void,
+    signout: () => void,
+    getToken: () => void
     errorMessage: (message: string) => void
 }
 
@@ -35,6 +39,18 @@ const authReduce = (prevState: AuthState, action: AuthAction): AuthState => {
                 role: action.payload.role,
                 errorMessage: null,
                 loading: false
+            }
+        case 'signout':
+            return {
+                token: null,
+                role: null,
+                errorMessage: null,
+                loading: false
+            }
+        case 'getToken':
+            return {
+                ...prevState,
+                token: action.payload.token
             }
         case 'loading':
             return {
@@ -55,19 +71,37 @@ const authReduce = (prevState: AuthState, action: AuthAction): AuthState => {
 const signin = (dispatch: Dispatch<AuthAction>) => async(body: LoginInterface) => {
     try {
         dispatch({type: 'loading'})
-        const {data} = await dbApi.post<UserResponseInterface>('/user/auth', body);
+        const {data} = await dbApi.post<UserResponseInterface>('/auth', body);
+        localStorage.setItem('mg-23-token', data.token)
         dispatch({type: 'signin', payload: {token: data.token, role: data.role}})
     } catch(error: any) {
         if (error.response.data.message) {
-            toast.error(error.response.data.message.split(':')[1])
-            dispatch({type: 'errorMessage', payload: {errorMessage: error.response.data.message.split(':')[1]}})
+            toast.error(error.response.data.message)
+            dispatch({type: 'errorMessage', payload: {errorMessage: error.response.data.message}})
         }
+    }
+}
+
+const signout = (dispatch: Dispatch<AuthAction>) => async() => {
+
+    localStorage.removeItem('mg-23-token')
+    dispatch({type: 'signout'})
+}
+
+const getToken = (dispaych: Dispatch<AuthAction>) => async() => {
+
+    const token = localStorage.getItem('mg-23-token')
+
+    if (token) {
+        dispaych({type: 'getToken', payload: {token}})
     }
 }
 
 export const {Provider, Context} = dataContext<AuthContextProps>(authReduce, 
     {
-        signin
+        signin,
+        signout,
+        getToken
     },
     {
         token: null,
