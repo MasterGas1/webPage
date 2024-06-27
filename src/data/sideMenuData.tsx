@@ -1,4 +1,4 @@
-import { IoBarChart, IoBasket } from "react-icons/io5";
+import { IoBarChart, IoBasket, IoPerson } from "react-icons/io5";
 import styles from '@/app/(Admin)/components/ItemSideMenu/ItemSideMenu.module.css'
 
 interface ItemSideMenu {
@@ -15,8 +15,13 @@ const sideMenuData: ItemSideMenu[] = [
     },
     {
         name: "Servicios",
-        href: "/services",
+        href: "/service",
         icon: <IoBasket className={styles.icon}/>
+    },
+    {
+        name: "Instaladores",
+        href: "/installer",
+        icon: <IoPerson className={styles.icon}/>
     }
 ]
 
