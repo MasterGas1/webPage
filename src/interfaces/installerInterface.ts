@@ -4,6 +4,11 @@ export interface createInstallerInterface extends userInterface {
     installer: installersInterface
 }
 
+export interface installerResponseInterface extends userInterface {
+    _id: string
+    installerId: installersInterface
+}
+
 export interface userInterface {
     name: string
     lastName: string

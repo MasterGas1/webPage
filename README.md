@@ -1,5 +1,8 @@
 
 ## Getting Started
+
+### Node version :20.14.0
+
 First run the dependencies installation:
 ```
 npm install
