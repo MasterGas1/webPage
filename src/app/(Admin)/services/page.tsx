@@ -2,19 +2,21 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import { Context as ServicesContext } from '@/context/serviceContext';
-import { Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner } from '@nextui-org/react';
+import { Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import Image from 'next/image';
 import { IoAdd } from "react-icons/io5";
 import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import CreateService from './CreateService';
+import { ServicesInterface } from '@/interfaces/servicesInterface';
+import ServicesDetail from './ServiceDetail';
 
 const page = () => {
 
   const [openModal, setOpenModal] = useState(false)
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [serviceSelected, setServiceSelected] = useState({} as ServicesInterface);
   const { state, getServices } = useContext(ServicesContext);
   const { services } = state
-
-  console.log('State Service page=======================', state)
 
   useEffect(() => {
     getServices()
@@ -67,9 +69,20 @@ const page = () => {
                   <TableCell>{service.price}</TableCell>
                   <TableCell>
                     <div className='flex gap-2'>
-                      <Button size='lg' radius='full' isIconOnly className='bg-transparent text-black'>
-                        <PiDotsThreeOutlineVertical size={40} />
-                      </Button>
+
+                      <Dropdown>
+                        <DropdownTrigger>
+                          <Button size='lg' radius='full' isIconOnly className='bg-transparent text-black'>
+                            <PiDotsThreeOutlineVertical size={40} />
+                          </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Static Actions">
+                          <DropdownItem onClick={e => {
+                            setServiceSelected(service)
+                            setOpenDetailModal(true)
+                          }} key="new">Mostrar Servicio</DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -79,6 +92,7 @@ const page = () => {
         </Table>
       </div>
       <CreateService isOpen={openModal} openModal={setOpenModal} />
+      <ServicesDetail isOpen={openDetailModal} openModal={setOpenDetailModal} service={serviceSelected} />
     </div>
   )
 }
