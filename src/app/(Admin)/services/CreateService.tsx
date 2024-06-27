@@ -26,8 +26,6 @@ const CreateService = ({ isOpen, openModal }: Props) => {
 
     const { state, createService } = useContext(ServicesContext);
 
-    console.log('State====>', state)
-
     const { onChange, name, price, description } = useForm({
         name: '',
         price: '',
@@ -41,7 +39,6 @@ const CreateService = ({ isOpen, openModal }: Props) => {
             description,
             type: "root service",
         }
-        console.log('Values====>', body)
         createService(body)
     }
 

@@ -3,7 +3,7 @@ import { linkLandingPagesInterface } from "@/interfaces/landingPageInterface";
 export const linksLandingPagesData:linkLandingPagesInterface[] = [
     {
         name: "Servicios",
-        href: "#"
+        href: "/services"
     },
     {
         name: "Contacto",
