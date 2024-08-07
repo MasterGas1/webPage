@@ -6,7 +6,7 @@ import { Checkbox, Spinner } from '@nextui-org/react';
 import { useRegisterInstaller } from '@/hook/useRegisterInstaller';
 
 import CustomInput from './CustomInput';
-import GroupForm from './GroupForm';
+import GroupForm from '@/components/GroupForm';
 import CustomSelectState from './CustomSelect/CustomSelectState';
 import CustomSelectStateCity from './CustomSelect/CustomSelectStateCity';
 import CustomButton from '@/components/CustomButton';

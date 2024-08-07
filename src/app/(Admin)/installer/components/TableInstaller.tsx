@@ -9,15 +9,16 @@ import { Context as ContextInstaller } from "@/context/InstallerContext"
 
 interface TableInstallerProps {
   status: string,
-  installers: installerResponseInterface[]
+  installers: installerResponseInterface[],
+  setStatus: (status: string) => void
+  onOpen: () => void
 }
 
-const TableInstaller = ({status, installers}: TableInstallerProps) => {
+const TableInstaller = ({status, installers, onOpen, setStatus}: TableInstallerProps) => {
 
-  const {getInstallers} = useContext(ContextInstaller)
+  const {getInstallers, getInstaller} = useContext(ContextInstaller)
 
   useEffect(() => {
-    
     getInstallers(status)
   }, [])
 
@@ -32,10 +33,20 @@ const TableInstaller = ({status, installers}: TableInstallerProps) => {
           <TableColumn>Correo electronico</TableColumn>
           <TableColumn>Acciones</TableColumn>
         </TableHeader>
-        <TableBody>
+        <TableBody
+          emptyContent="No hay instaladores registrados"
+        >
             {
               installers.map((installer) => (
-                <TableRow>
+                <TableRow
+                  onDoubleClick={() => {
+                    onOpen()
+                    getInstaller(installer._id)
+                    setStatus(status)
+                  }}
+                  className="cursor-pointer"
+                  key={installer._id}
+                >
                   <TableCell>{`${installer.name} ${installer.lastName}`}</TableCell>
                   <TableCell>{installer.installerId.companyName}</TableCell>
                   <TableCell>{installer.email}</TableCell>

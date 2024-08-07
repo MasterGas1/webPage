@@ -20,16 +20,16 @@ export interface installersInterface {
     companyName: string
     phoneNumber: string
     IMSSNumber: string
-    employeesNumber: number
+    employeesNumber: string
     website: string
-    ownOffice: boolean
-    ownVehicle: boolean
+    ownOffice: string
+    ownVehicle: string
     state: keyof typeof estadosMunicipios
     city: string
     address: string
     specializedTools: string
     certifications: string
     securityCourses: string
-    yearsExperience: number
+    yearsExperience: string
 
 }
