@@ -195,7 +195,6 @@ const Form = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(isValid.current)
     if (Object.values(isValid.current).every((value) => value === true) && formInstallerData.state && formInstallerData.city) {
       submitRegister({ ...formUserData, installer: formInstallerData });
     }
