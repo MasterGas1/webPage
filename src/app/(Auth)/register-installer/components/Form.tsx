@@ -6,7 +6,7 @@ import { Checkbox, Spinner } from '@nextui-org/react';
 import { useRegisterInstaller } from '@/hook/useRegisterInstaller';
 
 import CustomInput from './CustomInput';
-import GroupForm from './GroupForm';
+import GroupForm from '@/components/GroupForm';
 import CustomSelectState from './CustomSelect/CustomSelectState';
 import CustomSelectStateCity from './CustomSelect/CustomSelectStateCity';
 import CustomButton from '@/components/CustomButton';
@@ -195,7 +195,6 @@ const Form = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(isValid.current)
     if (Object.values(isValid.current).every((value) => value === true) && formInstallerData.state && formInstallerData.city) {
       submitRegister({ ...formUserData, installer: formInstallerData });
     }

@@ -14,7 +14,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'principal-color': "#2E5043"
+        'principal-color': "#2E5043",
+        'error-color': "#D85555"
       },
       fontSize: {
         'layout-title': "3vw"
