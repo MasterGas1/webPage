@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 import imageLogo from '../../../../../public/LogoMastergas.png'
@@ -10,7 +10,11 @@ import Spacer from '@/components/Spacer'
 import { useForm } from '@/hook/useForm'
 import CustomButton from '@/components/CustomButton'
 
-const page = () => {
+import { useChangePassword } from '@/hook/useChangePassword'
+
+const page = ({params}: {params: {token: string}}) => {
+
+    const [errorMessage, setSuccessMessage] = useState('')
 
     const {password, confirmPassword, onChange} = useForm({
         password: '',
@@ -22,6 +26,16 @@ const page = () => {
         confirmPassword: false
     })
 
+    const {userInformation, getStatusUpdatePassword, updatePassword} = useChangePassword()
+    const flag = useRef(false)
+
+    useEffect(() => {
+        if (!flag.current) {
+            flag.current = true
+            getStatusUpdatePassword(params.token)
+        }
+    },[])
+
     const changeState = (name: string, value: boolean) => {
         isValid.current = ({
             ...isValid.current,
@@ -32,7 +46,9 @@ const page = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (Object.values(isValid.current).every((value) => value === true) && password === confirmPassword) {
-            console.log('Form enviado')
+            updatePassword(params.token, password)
+        } else {
+            setSuccessMessage('Las contraseñas no coinciden')
         }
     }
     
@@ -45,42 +61,66 @@ const page = () => {
                     className="w-2/5 h-auto" 
                 />
 
-                <h1 className='text-4xl text-principal-color font-bold'>Nueva contraseña</h1>
+                {
+                    userInformation.updatePassword 
+                    ? (
+                        !userInformation.passwordChanged
+                        ? (
+                            <>
+                                <h1 className='text-4xl text-principal-color font-bold'>Nueva contraseña</h1>
 
-                <Spacer/>
+                                <Spacer/>
 
-                <form
-                    className='flex flex-col gap-4 w-full'
-                    onSubmit={handleSubmit}
+                                <form
+                                    className='flex flex-col gap-4 w-full'
+                                    onSubmit={handleSubmit}
 
-                >
-                    <CustomInput
-                        label='Nueva contraseña'
-                        type='password'
-                        name='password'
-                        patternMatch={/.{8,}/}
-                        value={password}
-                        errorMessage='La contraseña debe tener al menos 8 caracteres'
-                        setIsValid={changeState}
-                        onChange={onChange}
-                    />
+                                >
+                                    <CustomInput
+                                        label='Nueva contraseña'
+                                        type='password'
+                                        name='password'
+                                        patternMatch={/.{8,}/}
+                                        value={password}
+                                        errorMessage='La contraseña debe tener al menos 8 caracteres'
+                                        setIsValid={changeState}
+                                        onChange={onChange}
+                                    />
 
-                    <CustomInput
-                        label='Confirmar nueva contraseña'
-                        type='password'
-                        name='confirmPassword'
-                        patternMatch={/.{8,}/}
-                        value={confirmPassword}
-                        errorMessage='La contraseña debe tener al menos 8 caracteres'
-                        setIsValid={changeState}
-                        onChange={onChange}
-                    />
+                                    <CustomInput
+                                        label='Confirmar nueva contraseña'
+                                        type='password'
+                                        name='confirmPassword'
+                                        patternMatch={/.{8,}/}
+                                        value={confirmPassword}
+                                        errorMessage='La contraseña debe tener al menos 8 caracteres'
+                                        setIsValid={changeState}
+                                        onChange={onChange}
+                                    />
 
-                    <CustomButton
-                        label='Confirmar'
-                        type='submit'
-                    />
-                </form>
+                                    <p className='text-error-color text-md'>{errorMessage}</p>
+
+                                    <CustomButton
+                                        label='Confirmar'
+                                        type='submit'
+                                    />
+                                </form>
+                            </>
+                        )
+                        : (
+                            <>
+                                <Spacer/>
+                                <h1 className='text-4xl text-principal-color font-bold text-center'>La contraseña se cambio de manera exitosa</h1>
+                            </>
+                        )
+                    ) : (
+                        <>
+                            <Spacer/>
+                            <h1 className='text-4xl text-principal-color font-bold text-center'>El link de cambio de contraseña ha expirado</h1>
+                        </>
+                    )
+                }
+
             </div>
         </div>
     )
