@@ -61,7 +61,7 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
 const getServices = (dispatch: Dispatch<ServicesActions>) => async (body: ServicesInterface) => {
     try {
         dispatch({ type: 'loading' })
-        const { data } = await dbApi.get<ServicesInterface[]>('/service');
+        const { data } = await dbApi.get<ServicesInterface[]>('/service/rootServices');
         dispatch({ type: 'getServices', payload: { services: data } })
     } catch (error: any) {
         if (error.response.data.message) {
@@ -84,6 +84,7 @@ const createService = (dispatch: Dispatch<ServicesActions>) => async (body: Serv
     }
 }
 
+
 const getOneService = (dispatch: Dispatch<ServicesActions>) => async (id: string) => {
     try {
         dispatch({ type: 'loading' })
@@ -97,4 +98,10 @@ const getOneService = (dispatch: Dispatch<ServicesActions>) => async (id: string
     }
 }
 
-export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, { getServices, createService, getOneService }, { services: null, loading: false, errorMessage: null })
+export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, 
+    { getServices, createService, getOneService }, 
+    { services: [], 
+      loading: false, 
+      errorMessage: null 
+    }
+)

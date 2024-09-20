@@ -15,7 +15,7 @@ const sideMenuData: ItemSideMenu[] = [
     },
     {
         name: "Servicios",
-        href: "/service",
+        href: "/services",
         icon: <IoBasket className={styles.icon}/>
     },
     {
