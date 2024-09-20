@@ -6,7 +6,7 @@ import { Context as ServicesContext } from '@/context/serviceContext'
 
 const TableService = () => {
 
-    const { state } = useContext(ServicesContext)
+    const { state, getOneService } = useContext(ServicesContext)
 
   return (
     <div className='flex w-full justify-center'>
@@ -21,11 +21,11 @@ const TableService = () => {
             <TableColumn>Actions</TableColumn>
           </TableHeader>
           <TableBody
-            emptyContent="No hay Servicios registrados"
+            emptyContent="No hay servicios registrados"
           >
             {
               state.services.map((service) => (
-                <TableRow key={service._id} onDoubleClick={() => console.log(service)}>
+                <TableRow key={service._id} onDoubleClick={() => {getOneService(service._id)}} className='cursor-pointer'>
                     <TableCell>{service.name}</TableCell>
                     <TableCell className='text-center'>{service.description}</TableCell>
                     <TableCell>{service.price}</TableCell>

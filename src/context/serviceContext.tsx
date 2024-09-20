@@ -2,19 +2,21 @@ import { Dispatch } from "react";
 import { toast } from "react-toastify";
 
 import dbApi from "@/api/DbApi";
-import { ServicesInterface } from "@/interfaces/servicesInterface";
+import { LinkListServicesInterface, ServiceInterface, ServicesInterface } from "@/interfaces/servicesInterface";
 import dataContext from "./dataContext";
 
 export interface ServiceState {
     services: ServicesInterface[]
-    service: ServicesInterface
+    service : ServiceInterface | null
+    servicesLink: LinkListServicesInterface[]
     loading: boolean
     errorMessage: string | null
 }
 
 export type ServicesActions =
     | { type: "getServices", payload: { services: ServicesInterface[] } }
-    | { type: "getOneService", payload: { service: ServicesInterface } }
+    | { type: "getOneService", payload: { service: ServiceInterface } }
+    | { type: "getOneServiceLink", payload: { service: ServiceInterface } }
     | { type: 'loading' }
     | { type: 'errorMessage', payload: { errorMessage: string } }
 
@@ -22,6 +24,7 @@ export type ServicesActions =
         state: ServiceState,
         getServices: () => void,
         getOneService: (id: string) => void
+        getOneServiceLink: (id: string) => void
         createService: (body: ServicesInterface) => void
         errorMessage: (message: string) => void
     }
@@ -32,13 +35,38 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
             return {
                 ...prevState,
                 services: action.payload.services,
+                service: null,
+                servicesLink: [],
                 errorMessage: null,
                 loading: false
             }
         case 'getOneService':
+        
+            let servicesLink = prevState.servicesLink
+
+            servicesLink = servicesLink.concat({id: prevState.service?._id, name: prevState.service?.name})
+            
             return {
                 ...prevState,
                 service: action.payload.service,
+                services: action.payload.service.subservicesId,
+                servicesLink: 
+                    prevState.servicesLink.length === 0 
+                    ? [{id: "", name: 'Servicios principales'}] 
+                    : servicesLink
+                ,
+                errorMessage: null,
+                loading: false
+            }
+        case 'getOneServiceLink':
+
+            let serviceSpliced = prevState.servicesLink.splice(prevState.servicesLink.findIndex(({id}) => id === action.payload.service._id))
+
+            return {
+                ...prevState,
+                service: action.payload.service,
+                services: action.payload.service.subservicesId,
+                servicesLink: serviceSpliced,
                 errorMessage: null,
                 loading: false
             }
@@ -58,7 +86,7 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
     }
 }
 
-const getServices = (dispatch: Dispatch<ServicesActions>) => async (body: ServicesInterface) => {
+const getServices = (dispatch: Dispatch<ServicesActions>) => async () => {
     try {
         dispatch({ type: 'loading' })
         const { data } = await dbApi.get<ServicesInterface[]>('/service/rootServices');
@@ -88,8 +116,27 @@ const createService = (dispatch: Dispatch<ServicesActions>) => async (body: Serv
 const getOneService = (dispatch: Dispatch<ServicesActions>) => async (id: string) => {
     try {
         dispatch({ type: 'loading' })
-        const { data } = await dbApi.get<ServicesInterface>(`/service/${id}`);
+
+        const { data } = await dbApi.get<ServiceInterface>(`/service/${id}`);
         dispatch({ type: 'getOneService', payload: { service: data } })
+        
+    } catch (error: any) {
+        if (error.response.data.message) {
+            toast.error(error.response.data.message.split(':')[1])
+            dispatch({ type: 'errorMessage', payload: { errorMessage: error.response.data.message.split(':')[1] } })
+        }
+    }
+}
+
+const getOneServiceLink = (dispatch: Dispatch<ServicesActions>) => async (id: string) => {
+    try {
+        dispatch({ type: 'loading' })
+        if (id === '') {
+            getServices(dispatch)()
+        } else {
+            const { data } = await dbApi.get<ServiceInterface>(`/service/${id}`);
+            dispatch({ type: 'getOneServiceLink', payload: { service: data } })
+        }
     } catch (error: any) {
         if (error.response.data.message) {
             toast.error(error.response.data.message.split(':')[1])
@@ -99,8 +146,10 @@ const getOneService = (dispatch: Dispatch<ServicesActions>) => async (id: string
 }
 
 export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, 
-    { getServices, createService, getOneService }, 
-    { services: [], 
+    { getServices, createService, getOneService, getOneServiceLink }, 
+    { services: [],
+      servicesLink: [],
+      service: null,
       loading: false, 
       errorMessage: null 
     }
