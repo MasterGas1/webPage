@@ -28,6 +28,7 @@ export type ServicesActions =
         getOneService: (id: string) => void
         getOneServiceLink: (id: string) => void
         createService: (body: RequestRootServiceInterface, router: AppRouterInstance) => void
+        deleteService: (id: string) => void
         errorMessage: (message: string) => void
     }
 
@@ -152,9 +153,27 @@ const getOneServiceLink = (dispatch: Dispatch<ServicesActions>) => async (id: st
     }
 }
 
+const deleteService = (dispatch: Dispatch<ServicesActions>) => async (id: string, router: AppRouterInstance) => {
+    try {
+        dispatch({ type: 'loading' })
+        await dbApi.delete(`/service/${id}`)
+        getServices(dispatch)()
+        router.push('/services')
+    } catch (error: any) {
+
+    }
+}
+
 export const { Provider, Context } = dataContext<ServicesContextProps>(serviceReduce, 
-    { getServices, createService, getOneService, getOneServiceLink }, 
-    { services: [],
+    { 
+        getServices, 
+        createService, 
+        getOneService, 
+        getOneServiceLink,
+        deleteService
+    }, 
+    { 
+      services: [],
       servicesLink: [],
       service: null,
       loading: false, 

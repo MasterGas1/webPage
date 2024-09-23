@@ -6,7 +6,7 @@ import { Context as ServicesContext } from '@/context/serviceContext'
 
 const TableService = () => {
 
-    const { state, getOneService } = useContext(ServicesContext)
+    const { state, getOneService, deleteService } = useContext(ServicesContext)
 
   return (
     <div className='flex w-full justify-center'>
@@ -36,9 +36,9 @@ const TableService = () => {
                                     <IoEllipsisVerticalOutline size={20} />
                                 </Button>
                             </DropdownTrigger>
-                            <DropdownMenu>
+                            <DropdownMenu aria-label="Options">
                                 <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem>Delete</DropdownItem>
+                                <DropdownItem onClick={() => deleteService(service._id)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </TableCell>
