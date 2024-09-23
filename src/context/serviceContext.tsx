@@ -2,8 +2,9 @@ import { Dispatch } from "react";
 import { toast } from "react-toastify";
 
 import dbApi from "@/api/DbApi";
-import { LinkListServicesInterface, ServiceInterface, ServicesInterface } from "@/interfaces/servicesInterface";
+import { LinkListServicesInterface, RequestRootServiceInterface, ServiceInterface, ServicesInterface } from "@/interfaces/servicesInterface";
 import dataContext from "./dataContext";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export interface ServiceState {
     services: ServicesInterface[]
@@ -14,6 +15,7 @@ export interface ServiceState {
 }
 
 export type ServicesActions =
+    | { type: 'addService', payload: { service: ServicesInterface } }
     | { type: "getServices", payload: { services: ServicesInterface[] } }
     | { type: "getOneService", payload: { service: ServiceInterface } }
     | { type: "getOneServiceLink", payload: { service: ServiceInterface } }
@@ -25,12 +27,21 @@ export type ServicesActions =
         getServices: () => void,
         getOneService: (id: string) => void
         getOneServiceLink: (id: string) => void
-        createService: (body: ServicesInterface) => void
+        createService: (body: RequestRootServiceInterface, router: AppRouterInstance) => void
         errorMessage: (message: string) => void
     }
 
 const serviceReduce = (prevState: ServiceState, action: ServicesActions): ServiceState => {
     switch (action.type) {
+        case 'addService':
+            return {
+                ...prevState,
+                services: prevState.services.concat(action.payload.service),
+                service: null,
+                servicesLink: [],
+                errorMessage: null,
+                loading: false
+            }
         case 'getServices':
             return {
                 ...prevState,
@@ -93,22 +104,18 @@ const getServices = (dispatch: Dispatch<ServicesActions>) => async () => {
         dispatch({ type: 'getServices', payload: { services: data } })
     } catch (error: any) {
         if (error.response.data.message) {
-            toast.error(error.response.data.message.split(':')[1])
-            dispatch({ type: 'errorMessage', payload: { errorMessage: error.response.data.message.split(':')[1] } })
         }
     }
 }
 
-const createService = (dispatch: Dispatch<ServicesActions>) => async (body: ServicesInterface) => {
+const createService = (dispatch: Dispatch<ServicesActions>) => async (body: RequestRootServiceInterface, router: AppRouterInstance) => {
     try {
         dispatch({ type: 'loading' })
-        const { data } = await dbApi.post<ServicesInterface[]>('/service', body);
-        dispatch({ type: 'getServices', payload: { services: data } })
+        const { data } = await dbApi.post<ServicesInterface>('/service', body);
+        dispatch({ type: 'addService', payload: { service: data } })
+        router.push('/services')
     } catch (error: any) {
-        if (error.response.data.message) {
-            toast.error(error.response.data.message.split(':')[1])
-            dispatch({ type: 'errorMessage', payload: { errorMessage: error.response.data.message.split(':')[1] } })
-        }
+        toast.error(error.response.data.message)
     }
 }
 

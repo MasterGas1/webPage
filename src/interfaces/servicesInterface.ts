@@ -20,6 +20,14 @@ export interface ServiceInterface {
     subservicesId: ServicesInterface[]
 }
 
+export interface RequestRootServiceInterface {
+    name: string
+    description: string
+    type: string
+    price?: number
+    fatherServiceId?: string
+}
+
 export interface LinkListServicesInterface {
     id?: string
     name?: string 

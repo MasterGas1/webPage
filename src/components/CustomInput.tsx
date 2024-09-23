@@ -10,9 +10,10 @@ interface CustomInputProps {
     patternMatch: RegExp
     setIsValid: (name: string, value: boolean) => void
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    readonly?: boolean
 }
 
-const CustomInput = ({ label, type, name, value, patternMatch, errorMessage, setIsValid, onChange }: CustomInputProps) => {
+const CustomInput = ({ label, type, name, value, patternMatch, errorMessage, readonly, setIsValid, onChange }: CustomInputProps) => {
 
     const isInvalid = useMemo(() => {
         if (value === undefined) {
@@ -51,6 +52,7 @@ const CustomInput = ({ label, type, name, value, patternMatch, errorMessage, set
         isRequired
         isInvalid={isInvalid}
         onChange={onChange}
+        readOnly={readonly}
     />
   )
 }

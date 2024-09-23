@@ -2,23 +2,20 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import { Context as ServicesContext } from '@/context/serviceContext';
-import { Button} from '@nextui-org/react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { IoAdd } from "react-icons/io5";
 
-import CreateService from './CreateService';
 import { ServicesInterface } from '@/interfaces/servicesInterface';
 
 import TableService from './components/TableService';
 import InfoService from './components/InfoService';
 import LinkList from './components/LinkList';
 
+
 const page = () => {
 
-  const [openModal, setOpenModal] = useState(false)
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [serviceSelected, setServiceSelected] = useState({} as ServicesInterface);
-  const { getServices } = useContext(ServicesContext);
+
+  const {state: { service }, getServices } = useContext(ServicesContext);
  
 
   useEffect(() => {
@@ -33,11 +30,16 @@ const page = () => {
 
       <LinkList/>
 
-      <div className='flex w-full justify-end mb-2'>
-        <Button isIconOnly onClick={() => setOpenModal(true)} size="md" radius="md" className='bg-principal-color text-white'>
-          <IoAdd size={40} color='white' />
-        </Button>
-      </div>
+      {
+        service === null || service.type === 'root service' || service.type === 'subservice' 
+        ? <div className='flex w-full justify-end mb-2'>
+            <Link href={service === null ? '/services/createService' : `/services/createService/${service?._id}`} className='bg-principal-color text-white p-1 rounded-large'>
+              <IoAdd size={40} color='white' />
+            </Link>
+          </div>
+        : null
+      }
+
 
       <InfoService/>
 
