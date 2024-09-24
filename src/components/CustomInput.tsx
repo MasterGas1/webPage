@@ -41,13 +41,13 @@ const CustomInput = ({ label, type, name, value, patternMatch, errorMessage, rea
         variant='bordered'
         classNames={{
             label: 'text-principal-color dark:text-white/90 text-md',
-            input: ['bg-transparent'],
             inputWrapper: [
               'border-3',
               'group-data-[focus=true]:border-principal-color',
             ],
             innerWrapper: ['bg-transparent'],
         }}
+        className='bg-white rounded-xl'
         errorMessage={isInvalid && errorMessage}
         isRequired
         isInvalid={isInvalid}

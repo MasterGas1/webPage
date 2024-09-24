@@ -10,6 +10,7 @@ export interface ServiceState {
     services: ServicesInterface[]
     service : ServiceInterface | null
     servicesLink: LinkListServicesInterface[]
+    reload: boolean
     loading: boolean
     errorMessage: string | null
 }
@@ -19,18 +20,23 @@ export type ServicesActions =
     | { type: "getServices", payload: { services: ServicesInterface[] } }
     | { type: "getOneService", payload: { service: ServiceInterface } }
     | { type: "getOneServiceLink", payload: { service: ServiceInterface } }
+    | { type: "getInfoService", payload: { service: ServiceInterface } }
+    | { type: "updateService", payload: { service: ServicesInterface } }
+    | { type: 'deleteService', payload: { id: string } }
     | { type: 'loading' }
     | { type: 'errorMessage', payload: { errorMessage: string } }
 
-    type ServicesContextProps = {
-        state: ServiceState,
-        getServices: () => void,
-        getOneService: (id: string) => void
-        getOneServiceLink: (id: string) => void
-        createService: (body: RequestRootServiceInterface, router: AppRouterInstance) => void
-        deleteService: (id: string) => void
-        errorMessage: (message: string) => void
-    }
+type ServicesContextProps = {
+    state: ServiceState,
+    getServices: () => void,
+    getOneService: (id: string) => void
+    getOneServiceLink: (id: string) => void
+    getInfoService: (id: string) => void
+    createService: (body: RequestRootServiceInterface, router: AppRouterInstance) => void
+    updateService: (id: string, body: RequestRootServiceInterface, router: AppRouterInstance) => void
+    deleteService: (id: string, router: AppRouterInstance) => void
+    errorMessage: (message: string) => void
+}
 
 const serviceReduce = (prevState: ServiceState, action: ServicesActions): ServiceState => {
     switch (action.type) {
@@ -38,8 +44,6 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
             return {
                 ...prevState,
                 services: prevState.services.concat(action.payload.service),
-                service: null,
-                servicesLink: [],
                 errorMessage: null,
                 loading: false
             }
@@ -48,6 +52,7 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
                 ...prevState,
                 services: action.payload.services,
                 service: null,
+                reload: false,
                 servicesLink: [],
                 errorMessage: null,
                 loading: false
@@ -79,6 +84,35 @@ const serviceReduce = (prevState: ServiceState, action: ServicesActions): Servic
                 service: action.payload.service,
                 services: action.payload.service.subservicesId,
                 servicesLink: serviceSpliced,
+                errorMessage: null,
+                loading: false
+            }
+        case 'getInfoService':
+            return {
+                ...prevState,
+                service: action.payload.service,
+                errorMessage: null,
+                reload: true,
+                loading: false
+            }
+        case 'updateService':
+            return {
+                ...prevState,
+                services: prevState.services.map(service => service._id === action.payload.service._id ? action.payload.service : service),
+                service: {
+                    ...action.payload.service,
+                    fatherServiceId: {
+                        name: ''
+                    },
+                    subservicesId: []
+                },
+                errorMessage: null,
+                loading: false
+            }
+        case 'deleteService':
+            return {
+                ...prevState,
+                services: prevState.services.filter(service => service._id !== action.payload.id),
                 errorMessage: null,
                 loading: false
             }
@@ -130,8 +164,6 @@ const getOneService = (dispatch: Dispatch<ServicesActions>) => async (id: string
         
     } catch (error: any) {
         if (error.response.data.message) {
-            toast.error(error.response.data.message.split(':')[1])
-            dispatch({ type: 'errorMessage', payload: { errorMessage: error.response.data.message.split(':')[1] } })
         }
     }
 }
@@ -153,14 +185,39 @@ const getOneServiceLink = (dispatch: Dispatch<ServicesActions>) => async (id: st
     }
 }
 
+const getInfoService = (dispatch: Dispatch<ServicesActions>) => async (id: string) => {
+    try {
+        dispatch({ type: 'loading' })
+        const { data } = await dbApi.get<ServiceInterface>(`/service/${id}`);
+        dispatch({ type: 'getInfoService', payload: { service: data } })
+    } catch (error: any) {
+        if (error.response.data.message) {
+        }
+    }
+}
+
+const updateService = (dispatch: Dispatch<ServicesActions>) => async (id: string, body: RequestRootServiceInterface, router: AppRouterInstance) => {
+    try {
+        dispatch({ type: 'loading' })
+        const {data} = await dbApi.put<ServicesInterface>(`/service/${id}`, body)
+        dispatch({ type: 'updateService', payload: { service: data } })
+        router.push('/services')
+    } catch (error: any) {
+
+    }
+}
+
 const deleteService = (dispatch: Dispatch<ServicesActions>) => async (id: string, router: AppRouterInstance) => {
     try {
         dispatch({ type: 'loading' })
         await dbApi.delete(`/service/${id}`)
-        getServices(dispatch)()
+        dispatch({ type: 'deleteService', payload: { id } })
         router.push('/services')
     } catch (error: any) {
-
+        console.log(error)
+        if (error.response) {
+            toast.error(error.response.data.message)
+        }
     }
 }
 
@@ -170,12 +227,15 @@ export const { Provider, Context } = dataContext<ServicesContextProps>(serviceRe
         createService, 
         getOneService, 
         getOneServiceLink,
+        getInfoService,
+        updateService,
         deleteService
     }, 
     { 
       services: [],
       servicesLink: [],
       service: null,
+      reload: true,
       loading: false, 
       errorMessage: null 
     }

@@ -15,11 +15,13 @@ import LinkList from './components/LinkList';
 const page = () => {
 
 
-  const {state: { service }, getServices } = useContext(ServicesContext);
+  const {state: { service, reload }, getServices } = useContext(ServicesContext);
  
 
   useEffect(() => {
-    getServices()
+    if (service === null || reload) {
+      getServices()
+    }
   }, [])
 
   return (
@@ -43,7 +45,11 @@ const page = () => {
 
       <InfoService/>
 
-      <TableService/>
+      {
+        service === null || service.type === 'root service' || service.type === 'subservice'
+        ? <TableService/>
+        : null
+      }
     </div>
   )
 }

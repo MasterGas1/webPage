@@ -73,7 +73,7 @@ const page = () => {
                     name='name'
                     type='text'
                     value={name}
-                    patternMatch={/^[A-Za-z0-9 ]{2,}$$/}
+                    patternMatch={/^[A-Za-z0-9 /]{2,}$$/}
                     errorMessage='Solo se aceptan letras y numeros'
                     setIsValid={changeState}
                     onChange={(e) => onChange(e)}

@@ -6,7 +6,7 @@ export interface ServicesInterface {
     image: string
     type: string
     price: number
-    available: boolean
+    available: string
 }
 
 export interface ServiceInterface {
@@ -16,7 +16,10 @@ export interface ServiceInterface {
     image: string
     type: string
     price?: number
-    available: boolean
+    available: string
+    fatherServiceId: {
+        name: string
+    }
     subservicesId: ServicesInterface[]
 }
 

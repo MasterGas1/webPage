@@ -44,6 +44,7 @@ const CustomTextArea = ({label, name, value, errorMessage, patternMatch, onChang
       classNames={{
         input: ['bg-transparent', 'placeholder-principal-color', 'dark:placeholder-white/90'],
       }}
+      className='bg-white rounded-xl'
       variant='bordered'
       errorMessage={isInvalid && errorMessage}
       isInvalid={isInvalid}
