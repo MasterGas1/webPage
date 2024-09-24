@@ -2,97 +2,54 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import { Context as ServicesContext } from '@/context/serviceContext';
-import { Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { IoAdd } from "react-icons/io5";
-import { PiDotsThreeOutlineVertical } from "react-icons/pi";
-import CreateService from './CreateService';
+
 import { ServicesInterface } from '@/interfaces/servicesInterface';
-import ServicesDetail from './ServiceDetail';
+
+import TableService from './components/TableService';
+import InfoService from './components/InfoService';
+import LinkList from './components/LinkList';
+
 
 const page = () => {
 
-  const [openModal, setOpenModal] = useState(false)
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [serviceSelected, setServiceSelected] = useState({} as ServicesInterface);
-  const { state, getServices } = useContext(ServicesContext);
-  const { services } = state
+
+  const {state: { service, reload }, getServices } = useContext(ServicesContext);
+ 
 
   useEffect(() => {
-    getServices()
+    if (service === null || reload) {
+      getServices()
+    }
   }, [])
 
   return (
     <div className='p-10 w-full flex flex-col justify-center'>
       <div className='flex w-full justify-center mb-2'>
-        <h1 className='font-bold text-principal-color'>Servicios</h1>
+        <h1 className='font-bold text-principal-color text-3xl'>Servicios</h1>
       </div>
-      <div className='flex w-full justify-end mb-2'>
-        <Button isIconOnly onClick={() => setOpenModal(true)} size="md" radius="md" className='bg-black text-white'>
-          <IoAdd size={40} color='white' />
-        </Button>
-      </div>
-      <div className='flex w-full justify-center'>
-        <Table aria-label="Services table" radius='sm' shadow='none' className='bg-transparent'>
-          <TableHeader className='bg-transparent opacity-0'>
-            <TableColumn width={400}>Nombre</TableColumn>
-            <TableColumn className='text-center'>Descripción</TableColumn>
-            <TableColumn>Precio</TableColumn>
-            <TableColumn>Actions</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {state.loading ? (
-              <TableRow>
-                <TableCell colSpan={4} className='text-center'>
-                  <Spinner color='success' />
-                </TableCell>
-                <TableCell colSpan={4} className='text-center'>
-                  <Spinner color='success' />
-                </TableCell>
-                <TableCell colSpan={4} className='text-center'>
-                  <Spinner color='success' />
-                </TableCell>
-                <TableCell colSpan={4} className='text-center'>
-                  <Spinner color='success' />
-                </TableCell>
-              </TableRow>
-            ) :
-              services && services.map((service) => (
-                <TableRow key={service.name}>
-                  <TableCell>
-                    <div className='flex gap-2 items-center'>
-                      <Image alt='product' width={30} height={30} src={`${service.image}`} />
-                      <p>{service.name}</p>
-                    </div>
-                  </TableCell>
-                  <TableCell className='text-center'>{service.description}</TableCell>
-                  <TableCell>{service.price}</TableCell>
-                  <TableCell>
-                    <div className='flex gap-2'>
 
-                      <Dropdown>
-                        <DropdownTrigger>
-                          <Button size='lg' radius='full' isIconOnly className='bg-transparent text-black'>
-                            <PiDotsThreeOutlineVertical size={40} />
-                          </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu aria-label="Static Actions">
-                          <DropdownItem onClick={e => {
-                            setServiceSelected(service)
-                            setOpenDetailModal(true)
-                          }} key="new">Mostrar Servicio</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </Table>
-      </div>
-      <CreateService isOpen={openModal} openModal={setOpenModal} />
-      <ServicesDetail isOpen={openDetailModal} openModal={setOpenDetailModal} service={serviceSelected} />
+      <LinkList/>
+
+      {
+        service === null || service.type === 'root service' || service.type === 'subservice' 
+        ? <div className='flex w-full justify-end mb-2'>
+            <Link href={service === null ? '/services/createService' : `/services/createService/${service?._id}`} className='bg-principal-color text-white p-1 rounded-large'>
+              <IoAdd size={40} color='white' />
+            </Link>
+          </div>
+        : null
+      }
+
+
+      <InfoService/>
+
+      {
+        service === null || service.type === 'root service' || service.type === 'subservice'
+        ? <TableService/>
+        : null
+      }
     </div>
   )
 }

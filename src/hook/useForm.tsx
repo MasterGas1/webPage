@@ -4,7 +4,7 @@ export const useForm = <T extends object>(initialState: T) => {
 
     const [state, setState] = useState(initialState);
 
-    const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = (e : React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         setState({
             ...state,
             [e.target.name]: e.target.value

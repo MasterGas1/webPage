@@ -2,7 +2,7 @@ import React from 'react'
 
 interface CustomTextFieldProps {
     label: string
-    data?: string
+    data?: string | number
 }
 
 const CustomTextField = ({label, data}: CustomTextFieldProps) => {
