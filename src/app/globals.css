@@ -1,9 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 
 :root {
-    --principal-color: #2E5043
+    --principal-color: #2E5043;
+    --secondary-color: #A6A6A6;
+    --principal-text-color: #FFFFFF;
+    --secondary-text-color: #000000;
+    --light-mode-background-color: #FFFFFF;
+    --dark-mode-background-color: #424242;
+    --error-color: #D85555;
+    --success-color: #55D855;
+    --input-text-color: #212121;
+    --backgound-principal-color-input: #cbcbcb;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+input {
+
 }
 
 body {
