@@ -14,12 +14,15 @@ const Input: React.FC<InputProps> = ({
   isClearable,
   isError,
   radius = "none",
+  inputBackgroundColor,
+  activeLabelColor,
   onClear,
   onChange,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [typeInput, setTypeInput] = useState(type);
   const [valueAux, setValueAux] = useState(value);
+  const [isFocused, setIsFocused] = useState(false);
 
   const variantsClasses = {
     bordered: {
@@ -70,7 +73,11 @@ const Input: React.FC<InputProps> = ({
         variants === "bordered" &&
         isError &&
         errorVariantsClasses[variants].groupInputContainer
-      } ${radiusVariantsClasses[radius]}`}
+      } ${radiusVariantsClasses[radius]}
+      `}
+      style={{
+        backgroundColor: inputBackgroundColor,
+      }}
       onClick={handleFocus}
     >
       <input
@@ -81,6 +88,8 @@ const Input: React.FC<InputProps> = ({
         ref={inputRef}
         type={typeInput}
         value={valueAux}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         onChange={(e) => {
           setValueAux(e.target.value);
           onChange(e);
@@ -123,11 +132,13 @@ const Input: React.FC<InputProps> = ({
           }}
         />
       )}
-
       <label
         className={`${styles.formLabelInput} ${
           isError && styles.formLabelInputError
         }`}
+        style={{
+          color: isFocused ? activeLabelColor : undefined,
+        }}
       >
         {label}
         {required && <span className={styles.requiredLabelInput}> *</span>}

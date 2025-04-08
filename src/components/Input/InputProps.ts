@@ -1,6 +1,6 @@
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   value: string | number;
   variants: "flat" | "bordered" | "underlined";
   required?: boolean;
@@ -8,6 +8,8 @@ export interface InputProps
   isError?: boolean;
   errorMessage?: string;
   radius?: "none" | "sm" | "md" | "lg";
+  inputBackgroundColor?: string;
+  activeLabelColor?: string;
   onClear?: () => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

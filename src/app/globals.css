@@ -6,15 +6,19 @@
 
 :root {
     --principal-color: #2E5043;
-    --secondary-color: #A6A6A6;
+    --principal-color-hover: #487A67;
+    --secondary-color: #d5d5d5;
+    --principal-text-color-hover: #cbcbcb;
     --principal-text-color: #FFFFFF;
     --secondary-text-color: #000000;
     --light-mode-background-color: #FFFFFF;
     --dark-mode-background-color: #424242;
     --error-color: #D85555;
+    --error-color-hover: #e75c5c;
     --success-color: #55D855;
     --input-text-color: #212121;
     --backgound-principal-color-input: #cbcbcb;
+    --button-color-bordered-secondary: #848484;
 }
 
 * {

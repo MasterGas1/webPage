@@ -1,10 +1,7 @@
-import React from 'react'
-import {Spacer as SpacerNextUI} from '@nextui-org/react'
+import React from "react";
 
 const Spacer = () => {
-  return (
-    <SpacerNextUI y={8}/>
-  )
-}
+  return <br />;
+};
 
-export default Spacer
+export default Spacer;
