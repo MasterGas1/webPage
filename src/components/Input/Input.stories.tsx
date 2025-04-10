@@ -1,7 +1,6 @@
 import type { Meta, StoryFn, StoryObj } from "@storybook/react";
 import Input from "./Input";
-import { useEffect, useState } from "react";
-import { IoMail } from "react-icons/io5";
+import { useState } from "react";
 
 const meta = {
   title: "Components/Input",

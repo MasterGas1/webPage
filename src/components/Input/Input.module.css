@@ -4,6 +4,7 @@
     position: relative;
     padding: 15px 10px 0;
     margin-top: 10px;
+    width: 100%;
 }
 
 .formInputField {
@@ -27,7 +28,7 @@
     top: 20px;
 }
 
-label,
+.formLabelInput,
 .formInputField:focus ~ .formLabelInput {
     position: absolute;
     top: 0;

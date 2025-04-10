@@ -1,0 +1,116 @@
+.buttonContainer {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 15px;
+    transition: 0.3s;
+    font-weight: 400;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .buttonContainer label {
+    cursor: pointer;
+  }
+
+  .buttonContainer .buttonLabel { 
+    margin-left: 10px;
+  }
+  
+  .buttonContainerFlatPrincipal {
+    background-color: var(--principal-color);
+    color: var(--principal-text-color);
+  }
+  
+  .buttonContainerFlatPrincipal:hover {
+    background-color: var(--principal-color-hover);
+  }
+  
+  .buttonContainerFlatSecondary {
+    background-color: var(--secondary-color);
+    color: var(--principal-color);
+  }
+  
+  .buttonContainerFlatSecondary:hover {
+    background-color: var(--principal-text-color-hover);
+  }
+
+  .buttonContainerFlatError {
+    background-color: var(--error-color);
+    color: var(--principal-text-color);
+  }
+  
+  .buttonContainerFlatError:hover {
+    background-color: var(--error-color-hover);
+  }
+
+  .buttonContainerBorderedPrincipal{
+    border: 1.5px solid var(--principal-color);
+    color: var(--principal-color);
+  }
+
+  .buttonContainerBorderedPrincipal:hover{
+    border: 1.5px solid var(--principal-color-hover);
+    color: var(--principal-color-hover);
+  }
+
+  .buttonContainerBorderedSecondary{
+    border: 1.5px solid var(--button-color-bordered-secondary);
+    color: var(--principal-color);
+  }
+
+  .buttonContainerBorderedSecondary:hover{
+    border: 1.5px solid var(--principal-text-color-hover);
+    color: var(--principal-text-color-hover);
+  }
+
+  .buttonContainerBorderedError{
+    border: 1.5px solid var(--error-color);
+    color: var(--error-color);
+  }
+
+  .buttonContainerBorderedError:hover{
+    border: 1.5px solid var(--error-color-hover);
+    color: var(--error-color-hover);
+  }
+
+  .rippleContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4); /* ajustable */
+    transform: scale(0);
+    animation: ripple-animation 600ms ease-out;
+  }
+  
+  @keyframes ripple-animation {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .buttonDisabled {
+    opacity: 0.5;
+  }
+
+  .buttonRadiusFull {
+    border-radius: 50px;
+  }
+
+  .buttonRadiusMedium {
+    border-radius: 8px;
+  }
+
+  

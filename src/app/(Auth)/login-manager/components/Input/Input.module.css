@@ -1,0 +1,23 @@
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inputContainer label {
+    margin-bottom: 10px;
+    color: white;
+    font-size: large;
+}
+
+.inputContainer input {
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background-color: white;
+}
+
+.inputContainer span {
+    color: var(--error-color);
+}
