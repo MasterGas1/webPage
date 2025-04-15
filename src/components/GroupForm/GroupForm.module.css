@@ -1,0 +1,21 @@
+.groupFormContainer {
+    width: 100%;
+}
+
+.groupFormContainer .title {
+    color: black;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.groupFormContainer .underline {
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+.groupFormContainer .content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}

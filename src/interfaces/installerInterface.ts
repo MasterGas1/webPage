@@ -1,35 +1,9 @@
-import estadosMunicipios from '@/jsons/estados-municipios.json';
+import { CompanyInstallerInterface } from "./companyInstaller";
 
-export interface createInstallerInterface extends userInterface {
-    installer: installersInterface
-}
-
-export interface installerResponseInterface extends userInterface {
-    _id: string
-    installerId: installersInterface
-}
-
-export interface userInterface {
-    name: string
-    lastName: string
-    email: string
-    rfc: string
-}
-
-export interface installersInterface {
-    companyName: string
-    phoneNumber: string
-    IMSSNumber: string
-    employeesNumber: number | string
-    website: string
-    ownOffice: boolean | string
-    ownVehicle: boolean | string
-    state: keyof typeof estadosMunicipios
-    city: string
-    address: string
-    specializedTools: string
-    certifications: string
-    securityCourses: string
-    yearsExperience: number | string
-
+export interface companyInstallerRequestInterface {
+  name: string;
+  lastName: string;
+  email: string;
+  rfc: string;
+  companyInstaller: CompanyInstallerInterface;
 }
