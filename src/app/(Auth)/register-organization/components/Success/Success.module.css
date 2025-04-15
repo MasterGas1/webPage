@@ -1,0 +1,22 @@
+.successContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 65vh;
+}
+
+.successContainer h2 {
+    margin-bottom: 20px;
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 2.5rem;
+}
+
+.successContainer span {
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 1.5rem;
+    width: 70%;
+    text-align: center;
+}

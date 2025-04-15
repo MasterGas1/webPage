@@ -16,6 +16,7 @@ const Input: React.FC<InputProps> = ({
   radius = "none",
   inputBackgroundColor,
   activeLabelColor,
+  errorMessage,
   onClear,
   onChange,
 }) => {
@@ -66,83 +67,92 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <div
-      className={`${styles.groupInputContainer} ${
-        variantsClasses[variants].groupInputContainer
-      } ${
-        variants === "bordered" &&
-        isError &&
-        errorVariantsClasses[variants].groupInputContainer
-      } ${radiusVariantsClasses[radius]}
-      `}
-      style={{
-        backgroundColor: inputBackgroundColor,
-      }}
-      onClick={handleFocus}
-    >
-      <input
-        className={`${styles.formInputField} ${
-          variantsClasses[variants].inputField
-        } ${isError && errorVariantsClasses[variants].inputField}`}
-        placeholder={label}
-        ref={inputRef}
-        type={typeInput}
-        value={valueAux}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onChange={(e) => {
-          setValueAux(e.target.value);
-          onChange(e);
+    <div>
+      <div
+        className={`${styles.groupInputContainer} ${
+          variantsClasses[variants].groupInputContainer
+        } ${
+          variants === "bordered" &&
+          isError &&
+          errorVariantsClasses[variants].groupInputContainer
+        } ${radiusVariantsClasses[radius]}
+        `}
+        style={{
+          backgroundColor: inputBackgroundColor,
         }}
-      />
-
-      {isClearable && value && value !== "" && (
-        <IoCloseCircle
-          className={styles.clearIcon}
-          style={{
-            right: type === "password" ? "40px" : "10px",
-          }}
-          onClick={(event) => {
-            event.stopPropagation();
-            setValueAux("");
-            onClear && onClear();
+        onClick={handleFocus}
+      >
+        <input
+          className={`${styles.formInputField} ${
+            variantsClasses[variants].inputField
+          } ${isError && errorVariantsClasses[variants].inputField}`}
+          placeholder={label}
+          ref={inputRef}
+          type={type}
+          value={valueAux}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onChange={(e) => {
+            setValueAux(e.target.value);
+            onChange(e);
           }}
         />
-      )}
 
-      {type === "password" &&
-        typeInput === "password" &&
-        value &&
-        value !== "" && (
-          <IoEyeOutline
-            className={styles.eyeIcon}
+        {isClearable && value && value !== "" && (
+          <IoCloseCircle
+            className={styles.clearIcon}
+            style={{
+              right: type === "password" ? "40px" : "10px",
+            }}
             onClick={(event) => {
               event.stopPropagation();
-              setTypeInput("text");
+              setValueAux("");
+              onClear && onClear();
             }}
           />
         )}
 
-      {type === "password" && typeInput === "text" && value && value !== "" && (
-        <IoEyeOffOutline
-          className={styles.eyeIcon}
-          onClick={(event) => {
-            event.stopPropagation();
-            setTypeInput("password");
+        {type === "password" &&
+          typeInput === "password" &&
+          value &&
+          value !== "" && (
+            <IoEyeOutline
+              className={styles.eyeIcon}
+              onClick={(event) => {
+                event.stopPropagation();
+                setTypeInput("text");
+              }}
+            />
+          )}
+
+        {type === "password" &&
+          typeInput === "text" &&
+          value &&
+          value !== "" && (
+            <IoEyeOffOutline
+              className={styles.eyeIcon}
+              onClick={(event) => {
+                event.stopPropagation();
+                setTypeInput("password");
+              }}
+            />
+          )}
+        <label
+          className={`${styles.formLabelInput} ${
+            isError && styles.formLabelInputError
+          }`}
+          style={{
+            color: isFocused ? activeLabelColor : undefined,
           }}
-        />
+        >
+          {label}
+          {required && <span className={styles.requiredLabelInput}> *</span>}
+        </label>
+      </div>
+
+      {errorMessage && (
+        <span className={styles.errorMessage}>{errorMessage}</span>
       )}
-      <label
-        className={`${styles.formLabelInput} ${
-          isError && styles.formLabelInputError
-        }`}
-        style={{
-          color: isFocused ? activeLabelColor : undefined,
-        }}
-      >
-        {label}
-        {required && <span className={styles.requiredLabelInput}> *</span>}
-      </label>
     </div>
   );
 };

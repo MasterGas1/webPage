@@ -35,7 +35,7 @@
     display: block;
     transition: 0.2s;
     font-size: 12px;
-    color: var(--secondary-color);
+    color: var(--color-label-input);
 }
 
 .formInputField:focus ~.formLabelInput {
@@ -49,8 +49,8 @@
 /* Contained */
 
 .groupInputContainerContained {
-    border: 2px solid var(--secondary-color);
-    border-radius: 5px;
+    border: 2.5px solid var(--secondary-color);
+    border-radius: 10px;
 }
 
 .groupInputContainerContained:focus-within {
@@ -131,4 +131,10 @@
 
 .radiusLg {
     border-radius: 15px;
+}
+
+/* Error */
+.errorMessage {
+    color: var(--error-color);
+    font-size: 12px;
 }
