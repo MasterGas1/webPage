@@ -1,116 +1,119 @@
-.buttonContainer {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    padding: 5px 15px;
-    transition: 0.3s;
-    font-weight: 400;
-    overflow: hidden;
-    cursor: pointer;
-  }
+.defaultButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .buttonContainer label {
-    cursor: pointer;
-  }
+.buttonContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* Espaciado entre el icono y el texto */
+}
 
-  .buttonContainer .buttonLabel { 
-    margin-left: 10px;
-  }
-  
-  .buttonContainerFlatPrincipal {
-    background-color: var(--principal-color);
-    color: var(--principal-text-color);
-  }
-  
-  .buttonContainerFlatPrincipal:hover {
-    background-color: var(--principal-color-hover);
-  }
-  
-  .buttonContainerFlatSecondary {
-    background-color: var(--secondary-color);
-    color: var(--principal-color);
-  }
-  
-  .buttonContainerFlatSecondary:hover {
-    background-color: var(--principal-text-color-hover);
-  }
+.defaultButton:hover {
+  background-color: #2e5043e5;
+}
 
-  .buttonContainerFlatError {
-    background-color: var(--error-color);
-    color: var(--principal-text-color);
-  }
-  
-  .buttonContainerFlatError:hover {
-    background-color: var(--error-color-hover);
-  }
+.fullWidth {
+  width: 100%;
 
-  .buttonContainerBorderedPrincipal{
-    border: 1.5px solid var(--principal-color);
-    color: var(--principal-color);
-  }
+}
 
-  .buttonContainerBorderedPrincipal:hover{
-    border: 1.5px solid var(--principal-color-hover);
-    color: var(--principal-color-hover);
-  }
+/* Background colors */
+.bgPrimary {
+  background-color: var(--principal-color);
+}
 
-  .buttonContainerBorderedSecondary{
-    border: 1.5px solid var(--button-color-bordered-secondary);
-    color: var(--principal-color);
-  }
+.bgSecondary {
+  background-color: var(--secondary-color);
+}
 
-  .buttonContainerBorderedSecondary:hover{
-    border: 1.5px solid var(--principal-text-color-hover);
-    color: var(--principal-text-color-hover);
-  }
+.bgError {
+  background-color: var(--error-color);
+}
 
-  .buttonContainerBorderedError{
-    border: 1.5px solid var(--error-color);
-    color: var(--error-color);
-  }
+/* Radius */
+.radiusNone {
+  border-radius: 0;
+}
 
-  .buttonContainerBorderedError:hover{
-    border: 1.5px solid var(--error-color-hover);
-    color: var(--error-color-hover);
-  }
+.radiusSmall {
+  border-radius: 8px;
+}
 
-  .rippleContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 1;
-  }
-  
-  .ripple {
-    position: absolute;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.4); /* ajustable */
-    transform: scale(0);
-    animation: ripple-animation 600ms ease-out;
-  }
-  
-  @keyframes ripple-animation {
-    to {
-      transform: scale(4);
-      opacity: 0;
-    }
-  }
+.radiusMedium {
+  border-radius: 12px;
+}
 
-  .buttonDisabled {
-    opacity: 0.5;
-  }
+.radiusLarge {
+  border-radius: 14px;
+}
 
-  .buttonRadiusFull {
-    border-radius: 50px;
-  }
+.radiusFull {
+  border-radius: 9999px;
+  /* Totalmente redondeado */
+}
 
-  .buttonRadiusMedium {
-    border-radius: 8px;
-  }
+/* Sizes */
+.btnSmall {
+  padding: 0.5rem 1.25rem;
+}
 
-  
+.btnMedium {
+  padding: 0.75rem 1.5rem;
+}
+
+.btnLarge {
+  padding: 1rem 2rem;
+  ;
+}
+
+/* Text colors */
+.textLight {
+  color: var(--principal-text-color);
+}
+
+.textDark {
+  color: var(--secondary-text-color)
+}
+
+/* Variants */
+.flatButton {
+  border: 0
+}
+
+.borderedButton {
+  color: var(--principal-color);
+  border: 1px solid black;
+  background-color: transparent;
+}
+
+.borderedButton:hover {
+  background-color: var(--principal-color);
+  color: var(--principal-text-color);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spinner de carga */
+.spinner {
+  font-size: 1.2rem;
+  animation: spin 1s linear infinite;
+}
+
+/* Animación de giro */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilo cuando está en carga */
+.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

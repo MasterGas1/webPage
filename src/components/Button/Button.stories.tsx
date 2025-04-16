@@ -1,121 +1,108 @@
-import type { Meta, StoryFn, StoryObj } from "@storybook/react";
-import Button from "./Button";
+import type { Meta, StoryObj } from '@storybook/react';
+
+import Button from './Button';
+import { FaCheck } from 'react-icons/fa';
 
 const meta = {
   title: "Components/Button",
   component: Button,
+  argTypes: {
+    variant: {
+      control: "select"
+    },
+    type: {
+      control: "select"
+    },
+    backgroundColor: {
+      control: 'select'
+    },
+    textColor: {
+      control: 'select'
+    },
+    disabled: {
+      type: 'boolean'
+    },
+    fullWidth: {
+      type: 'boolean'
+    },
+    size: {
+      control: 'select'
+    },
+    radius: {
+      control: 'select'
+    },
+    iconPosition: {
+      control: 'select'
+    },
+    icon: {
+      type: 'string'
+    },
+    isLoading: {
+      type: 'boolean'
+    }
+  },
   tags: ["autodocs"],
 } satisfies Meta<typeof Button>;
 
 export default meta;
-type Story = StoryObj<typeof Button>;
 
-export const FlatPrincipal: Story = {
+type Story = StoryObj<typeof meta>;
+
+export const Flat: Story = {
   args: {
-    label: "Flat button",
-  },
+    label: 'Flat button',
+    variant: 'flat',
+  }
 };
 
-export const FlatSecondary: Story = {
+export const Bordered: Story = {
   args: {
-    label: "Flat button secondary",
-    backgroundColor: "secondary",
-  },
-};
+    label: 'Bordered button',
+    variant: 'bordered',
+  }
+}
 
-export const FlatError: Story = {
+export const NoneRadius = {
   args: {
-    label: "Flat button error",
-    backgroundColor: "error",
-  },
-};
+    label: "None Radius",
+    radius: 'none'
+  }
+}
+export const SmallRadius = {
+  args: {
+    label: "Small Radius",
+    radius: 'small'
+  }
+}
+export const MediumRadius = {
+  args: {
+    label: "Medium Radius",
+    radius: 'medium'
+  }
+}
+export const LargeRadius = {
+  args: {
+    label: "Large Radius",
+    radius: 'large'
+  }
+}
+export const FullRadius = {
+  args: {
+    label: "Full Radius",
+    radius: 'full'
+  }
+}
 
-export const BorderedPrincipal: Story = {
+export const Icon: Story = {
   args: {
-    label: "Bordered button",
-    variants: "bordered",
-  },
-};
+    icon: FaCheck,
+    variant: 'flat',
+  }
+}
 
-export const BorderedSecondary: Story = {
+export const IsLoading: Story = {
   args: {
-    label: "Bordered button secondary",
-    variants: "bordered",
-    backgroundColor: "secondary",
-  },
-};
-
-export const BorderedError: Story = {
-  args: {
-    label: "Bordered button error",
-    variants: "bordered",
-    backgroundColor: "error",
-  },
-};
-
-export const RadiusFull: Story = {
-  args: {
-    label: "Full radius button",
-    radius: "full",
-  },
-};
-
-export const RadiusMedium: Story = {
-  args: {
-    label: "Medium radius button",
-    radius: "medium",
-  },
-};
-
-export const RadiusNone: Story = {
-  args: {
-    label: "None radius button",
-    radius: "none",
-  },
-};
-
-export const Loading: Story = {
-  args: {
-    label: "Loading button",
-    isLoading: true,
-  },
-};
-
-export const LoadingSecondary: Story = {
-  args: {
-    label: "Loading button secondary",
-    isLoading: true,
-    backgroundColor: "secondary",
-  },
-};
-
-export const LoadingError: Story = {
-  args: {
-    label: "Loading button error",
-    isLoading: true,
-    backgroundColor: "error",
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: "Disabled button",
-    disabled: true,
-  },
-};
-
-export const DisabledSecondary: Story = {
-  args: {
-    label: "Disabled button secondary",
-    backgroundColor: "secondary",
-    disabled: true,
-  },
-};
-
-export const DisabledError: Story = {
-  args: {
-    label: "Disabled button error",
-    backgroundColor: "error",
-    disabled: true,
-  },
-};
+    variant: 'flat',
+    isLoading: true
+  }
+}

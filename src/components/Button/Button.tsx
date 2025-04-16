@@ -1,7 +1,7 @@
 import React, { FC, MouseEvent, useEffect, useRef, useState } from "react";
 import { ButtonProps } from "./ButtonProps";
 import styles from "./Button.module.css";
-import Spinner from "../Spinner/Spinner";
+import { FaSpinner } from 'react-icons/fa'
 
 interface Ripple {
   x: number;
@@ -11,108 +11,76 @@ interface Ripple {
 }
 
 const Button: FC<ButtonProps> = ({
-  label,
-  variants = "flat",
-  backgroundColor = "principal",
-  className,
-  isLoading,
   disabled,
-  radius = "medium",
-  leftIcon,
-  rightIcon,
+  style,
+  hover,
+  label,
+  fullWidth = false,
+  size = "medium",
+  icon: Icon,
+  iconPosition = "left",
+  isLoading = false,
+  type = "button",
+  variant = "flat",
+  radius = "small",
+  backgroundColor = "bgPrimary",
+  textColor = 'textLight',
   onClick,
   ...props
 }) => {
-  const [ripples, setRipples] = useState<Ripple[]>([]);
-  const ref = useRef<HTMLButtonElement>(null);
+  const variantClasses = {
+    flat: styles.flatButton,
+    bordered: styles.borderedButton
+  }
 
-  const [color, setColor] = useState("");
-  const [height, setHeight] = useState(0);
-
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    const button = event.currentTarget;
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
-
-    const newRipple: Ripple = {
-      x,
-      y,
-      size,
-      id: Date.now(),
-    };
-
-    setRipples((prev) => [...prev, newRipple]);
-
-    setTimeout(() => {
-      setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
-    }, 600);
-
-    if (onClick) onClick(event);
-  };
-
-  const variantsClasses = {
-    flat: {
-      principal: styles.buttonContainerFlatPrincipal,
-      secondary: styles.buttonContainerFlatSecondary,
-      error: styles.buttonContainerFlatError,
-    },
-    bordered: {
-      principal: styles.buttonContainerBorderedPrincipal,
-      secondary: styles.buttonContainerBorderedSecondary,
-      error: styles.buttonContainerBorderedError,
-    },
-  };
+  const sizesClasses = {
+    small: styles.btnSmall,
+    medium: styles.btnMedium,
+    large: styles.btnLarge
+  }
 
   const radiusClasses = {
-    none: null,
-    full: styles.buttonRadiusFull,
-    medium: styles.buttonRadiusMedium,
-  };
-
-  useEffect(() => {
-    if (ref.current) {
-      const styles = window.getComputedStyle(ref.current);
-      setColor(styles.color);
-      setHeight(ref.current.getBoundingClientRect().height / 2);
-    }
-  }, []);
+    none: styles.radiusNone,
+    small: styles.radiusSmall,
+    medium: styles.radiusMedium,
+    large: styles.radiusLarge,
+    full: styles.radiusFull
+  }
 
   return (
     <button
-      className={`${styles.buttonContainer} ${
-        variantsClasses[variants][backgroundColor]
-      } ${className} ${(disabled || isLoading) && styles.buttonDisabled}
-      ${radiusClasses[radius]}
-      `}
-      onClick={handleClick}
-      ref={ref}
+      className={`
+        ${styles.defaultButton} 
+        ${styles[backgroundColor]} 
+        ${styles[textColor]}
+        ${variantClasses[variant]}
+        ${radiusClasses[radius]}
+        ${sizesClasses[size]}
+        ${fullWidth && styles.fullWidth}
+        ${hover}
+        `
+      }
+      type={type}
       disabled={disabled || isLoading}
-      {...props}
+      onClick={onClick}
+      style={style}
     >
-      {isLoading && <Spinner color={color} size={height} />}
-      {leftIcon}
-      {label && (
-        <label className={`${isLoading && styles.buttonLabel}`}>{label}</label>
-      )}
-      {rightIcon}
-      <span className={styles.rippleContainer}>
-        {ripples.map((ripple) => (
-          <span
-            key={ripple.id}
-            className={styles.ripple}
-            style={{
-              top: ripple.y,
-              left: ripple.x,
-              width: ripple.size,
-              height: ripple.size,
-            }}
-          />
-        ))}
+      <span className={styles.buttonContent}>
+        {isLoading ? (
+          <>
+            <FaSpinner className={styles.spinner} />
+            <span>Cargando</span>
+          </>
+        ) : (
+          <>
+            {Icon && iconPosition === "left" && <Icon className={styles.icon} />}
+            {label && <span className={styles.text}>{label}</span>}
+            {Icon && iconPosition === "right" && <Icon className={styles.icon} />}
+          </>
+        )}
       </span>
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button
