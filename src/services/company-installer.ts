@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 
 import DbApi from "@/api/DbApi";
 import { ErrorResponseInterface } from "@/interfaces/errorResponse";
-import { companyInstallerRequestInterface } from "@/interfaces/installerInterface";
+import { companyInstallerRequestInterface } from "@/interfaces/companyInstallerInterface";
 
 export const registerCompanyInstaller = async (
   body: companyInstallerRequestInterface

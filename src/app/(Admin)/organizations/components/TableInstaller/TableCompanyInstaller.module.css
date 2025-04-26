@@ -1,0 +1,23 @@
+.loadingCompanyInstaller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}
+
+.buttonRefresh {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  background-color: var(--refresh-color-button);
+}
+
+.buttonRefresh:hover {
+  background-color: var(--refresh-color-button-hover);
+}
+
+.positionButton {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}

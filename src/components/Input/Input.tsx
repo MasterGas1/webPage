@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoEyeOutline, IoEyeOffOutline, IoCloseCircle } from "react-icons/io5";
 
 import styles from "./Input.module.css";
@@ -88,7 +88,7 @@ const Input: React.FC<InputProps> = ({
           } ${isError && errorVariantsClasses[variants].inputField}`}
           placeholder={label}
           ref={inputRef}
-          type={type}
+          type={typeInput}
           value={valueAux}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

@@ -1,0 +1,52 @@
+.pageChangePassowordContainer {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: var(--principal-color);
+    align-items: center;
+    justify-content: center;
+}
+
+.formChangePasswordContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    padding: 8px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.formChangePasswordContainer h1 {
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.formChangePasswordContainer img {
+    width: 30%;
+    height: auto;
+}
+
+.formChangePasswordContainer .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.formChangePasswordContainer .errorMessage {
+    color: var(--error-color);
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.formChangePasswordContainer .buttonConfirm {
+    height: 50px;
+}
