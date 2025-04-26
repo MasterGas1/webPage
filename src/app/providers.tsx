@@ -1,22 +1,20 @@
 // app/providers.tsx
-'use client'
+"use client";
 
-import { NextUIProvider } from '@nextui-org/react'
+import { NextUIProvider } from "@nextui-org/react";
 
-import { Provider as AuthProvider } from '@/context/AuthContext'
-import { Provider as ServiceProvider } from '@/context/serviceContext'
-import { Provider as InstallerProvider } from '@/context/InstallerContext'
+import { Provider as AuthProvider } from "@/context/AuthContext";
+import { Provider as ServiceProvider } from "@/context/serviceContext";
+import { Provider as InstallerProvider } from "@/context/companyInstallerContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
       <AuthProvider>
         <ServiceProvider>
-          <InstallerProvider>
-            {children}
-          </InstallerProvider>
+          <InstallerProvider>{children}</InstallerProvider>
         </ServiceProvider>
       </AuthProvider>
     </NextUIProvider>
-  )
+  );
 }

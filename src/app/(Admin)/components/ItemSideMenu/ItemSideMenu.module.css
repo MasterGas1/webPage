@@ -1,36 +1,52 @@
-.containerItem {
+.containerItemMenu {
     display: flex;
-    margin-left: 15px;
-    margin-right: 15px;
     align-items: center;
     height: 70px;
     padding: 5px;
+    margin: 5px 10px 5px 10px;
     border-radius: 10px;
-    transition: 0.3s;
 }
 
-.containerItem .textItem {
+.containerItemMenu .textItem {
     font-size: 1.1vw;
     font-weight: 600;
     color: var(--principal-color);
     margin-left: 10px;
 }
 
-.containerItem .icon {
+.containerItemMenu .icon {
     font-size: 2vw;
     font-weight: 600;
     color: var(--principal-color);
+
 }
 
-.containerItem:hover {
+.containerItemMenu:hover {
     background-color: var(--principal-color);
     transition: 0.3s;
 }
 
-.containerItem:hover .textItem {
+.containerItemMenu:hover .textItem {
     color: white;
 }
 
-.containerItem:hover .icon {
+.containerItemMenu:hover .icon {
+    color: white;
+}
+
+.collapsed {
+   justify-content: center;
+   margin: 5px 0px 5px 0px;
+}
+
+.itemSideMenuSelected {
+    background-color: var(--principal-color);
+}
+
+.itemSideMenuSelected .textItem {
+    color: white;
+}
+
+.itemSideMenuSelected .icon {
     color: white;
 }

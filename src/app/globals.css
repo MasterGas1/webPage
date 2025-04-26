@@ -20,16 +20,20 @@
     --backgound-principal-color-input: #cbcbcb;
     --button-color-bordered-secondary: #848484;
     --color-label-input: #9d9d9d;
+    --color-table-header: #575757;
+    --refresh-color-button: #848484;
+    --refresh-color-button-hover: #ababab;
 }
 
 * {
     font-family: 'Inter', sans-serif;
+    max-height: 100vh;
 }
 
 input {
 
 }
 
-body {
+html, body {
     background-color: #EDEDED;
 }

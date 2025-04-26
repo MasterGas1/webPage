@@ -1,0 +1,20 @@
+.pageOrganizationContainer {
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;   
+    width: 100%;
+}
+
+.pageOrganizationContainer .titleContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pageOrganizationContainer .titleContainer h1 {
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 2rem;
+}

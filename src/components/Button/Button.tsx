@@ -20,6 +20,7 @@ const Button: FC<ButtonProps> = ({
   radius = "medium",
   leftIcon,
   rightIcon,
+  icon,
   onClick,
   ...props
 }) => {
@@ -82,9 +83,12 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       className={`${styles.buttonContainer} ${
-        variantsClasses[variants][backgroundColor]
-      } ${className} ${(disabled || isLoading) && styles.buttonDisabled}
-      ${radiusClasses[radius]}
+        !className || backgroundColor
+          ? variantsClasses[variants][backgroundColor]
+          : className
+      } ${(disabled || isLoading) && styles.buttonDisabled}
+      ${radiusClasses[radius]} ${icon && !label && styles.buttonIconContainer}
+      ${className}
       `}
       onClick={handleClick}
       ref={ref}
@@ -96,6 +100,7 @@ const Button: FC<ButtonProps> = ({
       {label && (
         <label className={`${isLoading && styles.buttonLabel}`}>{label}</label>
       )}
+      {icon && !label && icon}
       {rightIcon}
       <span className={styles.rippleContainer}>
         {ripples.map((ripple) => (

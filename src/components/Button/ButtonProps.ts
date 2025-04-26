@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode, MouseEvent } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  label: string;
+  label?: string;
   variants?: "flat" | "bordered";
   backgroundColor?: "principal" | "secondary" | "error";
   radius?: "none" | "full" | "medium";
@@ -9,5 +9,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  icon?: ReactNode;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }

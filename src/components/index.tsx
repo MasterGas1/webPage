@@ -1,3 +1,15 @@
 export { default as Input } from "./Input/Input";
 export { default as Button } from "./Button/Button";
 export { default as Spinner } from "./Spinner/Spinner";
+export { default as Tabs } from "./Tabs/Tabs";
+export { default as Table } from "./Table/Table";
+export { default as TableHeader } from "./Table/TableHeader";
+export { default as TableColumn } from "./Table/TableColumn";
+export { default as TableRow } from "./Table/TableRow";
+export { default as TableCell } from "./Table/TableCell";
+export { default as TableBody } from "./Table/TableBody";
+export { default as Modal } from "./Modal/Modal";
+export { default as ModalContent } from "./Modal/ModalContent";
+export { default as ModalBody } from "./Modal/ModalBody";
+export { default as ModalHeader } from "./Modal/ModalHeader";
+export { default as ModalFooter } from "./Modal/ModalFooter";

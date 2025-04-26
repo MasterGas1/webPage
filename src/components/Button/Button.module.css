@@ -113,4 +113,8 @@
     border-radius: 8px;
   }
 
+  .buttonIconContainer {
+    padding: 0;
+    border-radius: 100px;
+  }
   

@@ -2,9 +2,10 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    min-width: 15vw;
-    max-width: 20vw;
+    width: 15vw;
     background-color: white;
+    transition: width 0.3s ease;
+    border-radius: 0 10px 10px 0;
 }
 
 .containerLogo {
@@ -23,4 +24,19 @@
 
 .containerItems {
     margin-top: 10px;
+    height: 100%;
 }
+
+.collapsed {
+    width: 4vw;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    color: var(--principal-color);
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 2vw;
+  }

@@ -1,0 +1,77 @@
+.tableContainer {
+    background-color: white;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.tableContainer thead {
+    background-color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.tableContainer thead th:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.tableContainer thead th:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.tableContainer th {
+    padding: 10px;
+    text-align: left;
+    color: var(--color-table-header);
+    font-size: small;
+}
+
+.tableContainer tbody tr td {
+    padding: 10px;
+    text-align: left;
+    font-size: small;
+}
+
+.tableContainer tbody tr:hover{
+    background-color: var(--secondary-color);
+    transition: 0.2s;
+}
+
+.tableContainer tbody tr.noHover:hover {
+    background-color: transparent;
+    cursor: default;
+  }
+
+.tableContainer .cursorPointer{
+    cursor: pointer;
+}
+
+.tableContainer tbody tr:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+
+.tableContainer tbody tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+
+.tableContainer tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.tableContainer tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.emptyTableWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    width: 100%;
+    border-radius: 12px;
+    color: var(--principal-text-color-hover);
+    font-weight: 500;
+    font-size: medium;
+  }
