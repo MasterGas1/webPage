@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RiExpandRightFill, RiExpandLeftLine } from "react-icons/ri";
 import { usePathname } from "next/navigation";
 
@@ -10,7 +10,10 @@ import ItemSideMenu from "../ItemSideMenu/ItemSideMenu";
 import styles from "./SideMenu.module.css";
 
 import sideMenuData from "@/data/sideMenuData";
+import { Context as AuthContext } from "@/context/AuthContext";
+
 import imageLogo from "../../../../../public/LogoMastergas.png";
+import { permissionsCategoryEnum } from "../../../../data/permissionCategory";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -18,6 +21,14 @@ const SideMenu = () => {
   const pathname = usePathname();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const {
+    state: { permissions },
+  } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log(permissions);
+  }, [permissions]);
 
   return (
     <div
@@ -36,16 +47,23 @@ const SideMenu = () => {
       </div>
 
       <div className={styles.containerItems}>
-        {sideMenuData.map(({ name, href, icon }) => (
-          <ItemSideMenu
-            key={name}
-            name={name}
-            href={href}
-            icon={icon}
-            collapsed={isOpen}
-            selected={pathname === href}
-          />
-        ))}
+        {permissions.length > 0 &&
+          sideMenuData.map(
+            ({ name, href, icon, category }) =>
+              (category === permissionsCategoryEnum.DASHBOARD ||
+                permissions
+                  .map(({ category }) => category)
+                  .includes(category)) && (
+                <ItemSideMenu
+                  key={name}
+                  name={name}
+                  href={href}
+                  icon={icon}
+                  collapsed={isOpen}
+                  selected={pathname === href}
+                />
+              )
+          )}
       </div>
 
       <button onClick={toggleMenu} className={styles.toggleButton}>

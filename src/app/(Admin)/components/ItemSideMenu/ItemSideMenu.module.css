@@ -1,14 +1,14 @@
 .containerItemMenu {
     display: flex;
     align-items: center;
-    height: 70px;
+    height: 60px;
     padding: 5px;
     margin: 5px 10px 5px 10px;
     border-radius: 10px;
 }
 
 .containerItemMenu .textItem {
-    font-size: 1.1vw;
+    font-size: 1vw;
     font-weight: 600;
     color: var(--principal-color);
     margin-left: 10px;

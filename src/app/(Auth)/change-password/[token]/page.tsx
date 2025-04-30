@@ -2,13 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 import imageLogo from "../../../../../public/LogoMastergas.png";
 
-import CustomInput from "@/components/CustomInput";
 import Spacer from "@/components/Spacer";
 import { useForm } from "@/hook/useForm";
-import CustomButton from "@/components/CustomButton";
 
 import { useChangePassword } from "@/hook/useChangePassword";
 
@@ -23,7 +22,7 @@ const page = ({ params }: { params: { token: string } }) => {
   useEffect(() => {
     if (!flag.current) {
       flag.current = true;
-      localStorage.clear();
+      Cookies.remove("mg-23-token");
       getStatusUpdatePassword(params.token);
     }
   }, []);
