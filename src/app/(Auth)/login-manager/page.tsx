@@ -46,7 +46,10 @@ const Page = () => {
   useEffect(() => {
     if (!state.token) {
       getToken();
-    } else {
+    } else if (
+      state.role === "Administrator" ||
+      state.role === "Company Installer"
+    ) {
       router.push("/dashboard");
     }
   }, [state.token]);
