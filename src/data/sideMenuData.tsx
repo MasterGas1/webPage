@@ -30,6 +30,12 @@ const sideMenuData: ItemSideMenu[] = [
     category: permissionsCategoryEnum.COMPANY_INSTALLER,
     icon: <FaBuilding className={styles.icon} />,
   },
+  {
+    name: "Instaladores",
+    href: "/installers",
+    category: permissionsCategoryEnum.INSTALLER,
+    icon: <IoPerson className={styles.icon} />,
+  },
 ];
 
 export default sideMenuData;

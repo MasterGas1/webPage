@@ -1,0 +1,123 @@
+.selectContainer {
+    position: relative;
+    width: 220px;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    height: 56px;
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px 0px;
+}
+
+.selectContainer:hover {
+    background-color: var(--secondary-color-hover);
+}
+
+.selectContainerBordered {
+    border: 2.5px solid var(--secondary-color);
+    background-color: transparent;
+}
+
+.selectContainerBordered:hover {
+    border: 2.5px solid var(--secondary-color-hover);
+    background-color: transparent;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.selectWrapper {
+    position: relative;
+    border-radius: 12px;
+    padding: 18px 8px 6px;
+    transition: border-color 0.2s;
+    outline: none;
+    height: 100%;
+    width: 100%;
+}
+
+.floatingLabel {
+    position: absolute;
+    left: 2%;
+    top: 30%;
+    font-size: 16px;
+    color: #999;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+  
+  .floating {
+    top: 6px;
+    font-size: 12px;
+    color: var(--principal-color);
+  }
+  
+  .selectedValue {
+    margin-top: 7px;
+    font-size: 14px;
+    color: #000000;
+    z-index: 1;
+  }
+
+.selectLabel {
+    display: block;
+    margin-bottom: 6px;
+    color: #444;
+    font-size: 10px;
+}
+
+.icon {
+    color: var(--principal-color);
+    margin-right: 10px;
+    transition: transform 0.2s ease;
+}
+
+.rotate {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+}
+
+.selectTrigger {
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.selectDropdown {
+    position: absolute;
+    width: 100%;
+    top: calc(100% + 5px);
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 10;
+    animation: fadeIn 0.15s ease-in-out;
+    padding: 5px;
+}
+
+.selectItem {
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-size: 13px;
+}
+
+.selectItem:hover {
+    background-color: #f0f0f5;
+    border-radius: 10px;
+}
+
+.selectItemActive {
+    background-color: #f0f0f5;
+    border-radius: 10px;
+}

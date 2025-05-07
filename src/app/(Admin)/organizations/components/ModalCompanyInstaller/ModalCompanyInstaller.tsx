@@ -9,7 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@/components";
-import CustomTextField from "../CustomTextField/CustomTextField";
+import CustomTextField from "../../../../../components/CustomTextField/CustomTextField";
 
 import { Context as ContextInstaller } from "@/context/companyInstallerContext";
 

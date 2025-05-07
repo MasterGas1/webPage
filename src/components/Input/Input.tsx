@@ -66,6 +66,12 @@ const Input: React.FC<InputProps> = ({
     inputRef.current?.focus();
   };
 
+  useEffect(() => {
+    if (valueAux !== value) {
+      setValueAux(value);
+    }
+  }, [value]);
+
   return (
     <div>
       <div

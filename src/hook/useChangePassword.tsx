@@ -37,8 +37,8 @@ export const useChangePassword = () => {
 
   const updatePassword = async (token: string, password: string) => {
     try {
-      await dbApi.put(
-        "/company-installer/activatePassword",
+      await dbApi.post(
+        "/auth/change-password",
         { password },
         {
           headers: {
