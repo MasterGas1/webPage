@@ -6,7 +6,7 @@ interface TableRowProps {
 }
 
 const TableRow: FC<TableRowProps> = ({ children, doubleClick }) => {
-  return <tr onClick={doubleClick}>{children}</tr>;
+  return <tr onDoubleClick={doubleClick}>{children}</tr>;
 };
 
 export default TableRow;

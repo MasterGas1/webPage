@@ -1,0 +1,45 @@
+.pageInstallerContainer {
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;   
+    width: 100%;
+}
+
+.pageInstallerContainer .titleContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pageInstallerContainer .titleContainer h1 {
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.pageInstallerContainer .buttonPosition {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.pageInstallerContainer .buttonPosition button {
+    border-radius: 7px;
+}
+
+.actionsButton {
+    display: flex;
+    gap: 5px;
+}
+
+.actionsButton button {
+    background-color: white;
+    color: var(--principal-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 5px;
+    border-radius: 100%;
+}

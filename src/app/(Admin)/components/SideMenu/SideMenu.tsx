@@ -60,7 +60,7 @@ const SideMenu = () => {
                   href={href}
                   icon={icon}
                   collapsed={isOpen}
-                  selected={pathname === href}
+                  selected={pathname.includes(href)}
                 />
               )
           )}

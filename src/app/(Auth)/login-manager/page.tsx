@@ -47,8 +47,8 @@ const Page = () => {
     if (!state.token) {
       getToken();
     } else if (
-      state.role === "Administrator" ||
-      state.role === "Company Installer"
+      (state.role === "Administrator" || state.role === "Company Installer") &&
+      state.status === "active"
     ) {
       router.push("/dashboard");
     }

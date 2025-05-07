@@ -23,11 +23,11 @@
     --color-table-header: #575757;
     --refresh-color-button: #848484;
     --refresh-color-button-hover: #ababab;
+    --secondary-color-hover: #c3c2c2;
 }
 
 * {
     font-family: 'Inter', sans-serif;
-    max-height: 100vh;
 }
 
 input {

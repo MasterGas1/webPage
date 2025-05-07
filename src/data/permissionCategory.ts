@@ -6,6 +6,7 @@ export const permissionsCategory = {
   CUSTOMER: "Customer",
   PERMISSION: "Permission",
   ORDER: "Order",
+  INSTALLER: "Installer",
 };
 
 export enum permissionsCategoryEnum {
@@ -17,4 +18,5 @@ export enum permissionsCategoryEnum {
   PERMISSION = "Permission",
   ORDER = "Order",
   DASHBOARD = "Dashboard",
+  INSTALLER = "Installer",
 }

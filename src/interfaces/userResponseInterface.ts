@@ -1,6 +1,7 @@
 export interface UserResponseInterface {
-    name: string
-    lastName: string
-    token: string
-    role: string
+  name: string;
+  lastName: string;
+  token: string;
+  role: string;
+  status: string;
 }

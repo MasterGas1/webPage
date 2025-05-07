@@ -17,10 +17,11 @@ export interface AuthState {
   loading: boolean;
   errorMessage: string | null;
   permissions: PermissionInterface[];
+  status: string | null;
 }
 
 export type AuthAction =
-  | { type: "signin"; payload: { token: string; role: string } }
+  | { type: "signin"; payload: { token: string; role: string; status: string } }
   | { type: "signout" }
   | { type: "getToken"; payload: { token: string } }
   | { type: "getPermissions"; payload: { permissions: PermissionInterface[] } }
@@ -45,6 +46,7 @@ const authReduce = (prevState: AuthState, action: AuthAction): AuthState => {
         role: action.payload.role,
         errorMessage: null,
         loading: false,
+        status: action.payload.status,
       };
     case "signout":
       return {
@@ -53,6 +55,7 @@ const authReduce = (prevState: AuthState, action: AuthAction): AuthState => {
         errorMessage: null,
         loading: false,
         permissions: [],
+        status: null,
       };
     case "getToken":
       return {
@@ -88,7 +91,7 @@ const signin =
       Cookies.set("mg-23-token", data.token);
       dispatch({
         type: "signin",
-        payload: { token: data.token, role: data.role },
+        payload: { token: data.token, role: data.role, status: data.status },
       });
     } catch (error: any) {
       if (error.response.data.message) {
@@ -137,5 +140,6 @@ export const { Provider, Context } = dataContext<AuthContextProps>(
     errorMessage: null,
     loading: false,
     permissions: [],
+    status: null,
   }
 );
