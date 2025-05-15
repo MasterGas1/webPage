@@ -10,6 +10,7 @@ export interface InputProps
   radius?: "none" | "sm" | "md" | "lg";
   inputBackgroundColor?: string;
   activeLabelColor?: string;
+  disabled?: boolean;
   onClear?: () => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

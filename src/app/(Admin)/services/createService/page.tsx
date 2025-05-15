@@ -1,151 +1,231 @@
-'use client'
+"use client";
 
-import React, { useContext, useRef, useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import {ToastContainer } from 'react-toastify';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
-import CustomCreationTitle from '@/components/CustomCreationTitle'
-import CustomInput from '@/components/CustomInput'
-import CustomSelect from '@/components/CustomSelect'
-import CustomTextArea from '@/components/CustomTextArea'
-import CustomButton from '@/components/CustomButton'
+import CustomCreationTitle from "@/components/CustomCreationTitle";
+import { Button, Input, Loading, Select, SelectItem } from "@/components";
 
-import { useForm } from '@/hook/useForm'
+import { useForm } from "@/hook/useForm";
 
-import { optionRootService } from '@/data/selectOptionData'
+import {
+  rootServiceOptions,
+  serviceTypeEnum,
+  serviceTypeReverseEnum,
+} from "@/data/serviceEnum";
 
-import { Context as ServicesContext } from '@/context/serviceContext';
+import { Context as ServicesContext } from "@/context/serviceContext";
+
+import styles from "./page.module.css";
+
+import { RequestRootServiceInterface } from "../interface/servicesInterface";
+
+import ImageIcon from "../../../../../public/ImageIcon.png";
+
+import usePermission from "@/hook/usePermission";
+import { permissionsCategoryEnum } from "@/data/permissionCategory";
 
 const page = () => {
+  const { hasPermission, permissionsCategory } = usePermission(
+    permissionsCategoryEnum.SERVICE
+  );
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const router = useRouter()
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | undefined>();
+  const [checkType, setCheckType] = useState("");
 
-  const [price, setPrice] = useState(0)
+  const {
+    state: { loading },
+    createService,
+  } = useContext(ServicesContext);
 
-  const {createService} = useContext(ServicesContext)
+  const initialValues = {
+    name: "",
+    description: "",
+    type: "",
+    price: 0,
+  };
 
-  const isValid = useRef({
-    name: false,
-    description: false,
-    type: false,
-    price: false
-  });
+  const validations = {
+    name: {
+      regexValidation: /^.+$/,
+      errorMessage: "Nombre es requerido",
+    },
+    description: {
+      regexValidation: /^.+$/,
+      errorMessage: "Descripcion es requerido",
+    },
+    type: {
+      regexValidation: /^.+$/,
+      errorMessage: "Tipo de servicio es requerido",
+    },
+    price: {
+      regexValidation: checkType === "root service price" ? /^[0-9]+$/ : /^.+$/,
+      errorMessage: "Precio es requerido",
+    },
+  };
 
-  const {name, description,type, form, onChange} = useForm({
-    name: '',
-    description: '',
-    type: ''
-  })
+  const onSubmit = async (value: RequestRootServiceInterface) => {
+    const { price, ...newValue } = value;
 
-  const changeState = (name: string, value: boolean) => {
-    isValid.current = ({
-      ...isValid.current,
-      [name]: value
-    })
-  }
+    const body: RequestRootServiceInterface = {
+      ...newValue,
+    };
 
-  const onClick = () => {
-    if (isValid.current.name && isValid.current.description && isValid.current.type) {
-
-      if (type === 'root service price' && isValid.current.price) {
-        createService({...form, price}, router)
-      } else if (type === 'root service') {
-        createService(form, router)
-      }
-
+    if (newValue.type === "root service price") {
+      body.price = price;
     }
-  }
+
+    createService(
+      {
+        ...body,
+        image: file,
+      },
+      router
+    );
+  };
+
+  const { name, description, type, price, errors, onChange, handleSubmit } =
+    useForm(initialValues, validations, onSubmit);
+
+  const handleClickUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const localUrl = URL.createObjectURL(file);
+
+      setImagePreview(localUrl);
+      setFile(file);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      permissionsCategory.length &&
+      !hasPermission(["Service:*", "Service:create"])
+    ) {
+      router.push("/dashboard");
+    }
+  }, [permissionsCategory]);
 
   return (
-    <div className='pl-10 pr-10 pt-10 w-full flex flex-col h-3/4'>
-        <CustomCreationTitle title='Crear Servicio'/>
-        
+    <div className={styles.pageCreateServiceContainer}>
+      {loading && <Loading />}
+      <div className={styles.formContainer}>
+        <CustomCreationTitle title="Crear servicio" />
         <div
-          className='grid gap-4 grid-cols-2 w-full mt-20'
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            flexDirection: "row",
+            gap: "1rem",
+            width: "100%",
+          }}
         >
           <div>
-            <CustomInput
-                label='Nombre del Servicio'
-                name='name'
-                type='text'
-                value={name}
-                patternMatch={/^[A-Za-z0-9 /]{2,}$$/}
-                errorMessage='Solo se aceptan letras y numeros'
-                setIsValid={changeState}
-                onChange={(e) => onChange(e)}
+            <Input
+              label="Nombre del Servicio"
+              name="name"
+              type="text"
+              value={name}
+              errorMessage={errors.name}
+              onChange={(e) => onChange(e.target.value, "name")}
+              variants="bordered"
             />
 
-            <br/>
+            <br />
 
-            <div
-              className='grid gap-4 grid-cols-2 w-full'
-            >
-              <CustomSelect
-                  label='Tipo de Servicio'
-                  name='type'
-                  value={type}
-                  items={optionRootService}
-                  onChange={(e) => {
-                    onChange(e)
-                    changeState('type', true)
-                  }}
-              />
+            <div className="grid gap-4 grid-cols-2 w-full">
+              <Select
+                value={serviceTypeEnum[type as keyof typeof serviceTypeEnum]}
+                onChange={(e) => {
+                  onChange(
+                    serviceTypeReverseEnum[
+                      e as keyof typeof serviceTypeReverseEnum
+                    ],
+                    "type"
+                  );
 
-              {
-                type === 'root service price' 
-                && <CustomInput
-                    label='Precio'
-                    name='price'
-                    type='number'
-                    value={price.toString()}
-                    patternMatch={/^[1-9][0-9]*$/}
-                    errorMessage='Solo se aceptan numeros'
-                    setIsValid={changeState}
-                    onChange={(e) => setPrice(Number(e.target.value))}
+                  setCheckType(
+                    serviceTypeReverseEnum[
+                      e as keyof typeof serviceTypeReverseEnum
+                    ]
+                  );
+                }}
+                variants="bordered"
+                label="Tipo de Servicio"
+                errorMessage={errors.type}
+              >
+                {rootServiceOptions.map(({ value, label }, index) => (
+                  <SelectItem key={index} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              {type === "root service price" && (
+                <Input
+                  label="Precio"
+                  name="price"
+                  type="number"
+                  value={price}
+                  errorMessage={errors.price}
+                  onChange={(e) => onChange(e.target.value, "price")}
+                  variants="bordered"
                 />
-              }
+              )}
             </div>
 
-            <br/>
+            <br />
 
-            <CustomTextArea
-                label='Descripción'
-                name='description'
-                value={description}
-                errorMessage='Solo se aceptan letras y numeros'
-                patternMatch={/^[A-Za-z0-9 ]{2,}$/}
-                setIsValid={changeState}
-                onChange={(e) => onChange(e)}
+            <Input
+              label="Descripcion"
+              name="description"
+              type="text"
+              value={description}
+              errorMessage={errors.description}
+              onChange={(e) => onChange(e.target.value, "description")}
+              variants="bordered"
             />
-
           </div>
 
-          <div className='flex justify-center'>
+          <div className={styles.rightContainer}>
             <Image
-              src={'https://res.cloudinary.com/dnesdnfxy/image/upload/v1726873252/mastergas23/services/vczvh2friktamywhum3c.webp'}
+              src={imagePreview || ImageIcon}
               width={400}
               height={400}
               alt="image"
-              className="w-2/5"
+              className={styles.image}
+            />
+            <Button
+              label="Subir imagen"
+              className={styles.uploadButton}
+              onClick={handleClickUpload}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              hidden
+              onChange={handleFileChange}
             />
           </div>
-      
         </div>
-
-        <div
-          className='flex justify-end mt-10 items-end h-full'
-        >
-          <CustomButton
-            label='Crear'
-            type='button'
-            onClick={onClick}
-          />
+        <div className="flex justify-end mt-10 items-end h-full">
+          <Button label="Crear" type="button" onClick={handleSubmit} />
         </div>
+      </div>
 
-        <ToastContainer autoClose={2000}/>
+      <ToastContainer autoClose={2000} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

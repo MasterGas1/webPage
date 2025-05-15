@@ -1,167 +1,245 @@
-'use client'
+"use client";
 
-import React, { useContext, useRef, useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import {ToastContainer } from 'react-toastify';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
-import CustomCreationTitle from '@/components/CustomCreationTitle'
-import CustomInput from '@/components/CustomInput'
-import CustomSelect from '@/components/CustomSelect'
-import CustomTextArea from '@/components/CustomTextArea'
-import CustomButton from '@/components/CustomButton'
+import CustomCreationTitle from "@/components/CustomCreationTitle";
+import { Button, Input, Loading, Select, SelectItem } from "@/components";
 
-import { useForm } from '@/hook/useForm'
+import { useForm } from "@/hook/useForm";
 
-import { optionSubService } from '@/data/selectOptionData'
+import {
+  serviceTypeEnum,
+  serviceTypeReverseEnum,
+  subserviceOptions,
+} from "@/data/serviceEnum";
 
-import { Context as ServicesContext } from '@/context/serviceContext';
+import { Context as ServicesContext } from "@/context/serviceContext";
+
+import styles from "./page.module.css";
+
+import ImageIcon from "../../../../../../public/ImageIcon.png";
+
+import { RequestRootServiceInterface } from "../../interface/servicesInterface";
+
+import usePermission from "@/hook/usePermission";
+import { permissionsCategoryEnum } from "@/data/permissionCategory";
 
 const page = () => {
+  const { hasPermission, permissionsCategory } = usePermission(
+    permissionsCategoryEnum.SERVICE
+  );
+  const router = useRouter();
 
-  const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [price, setPrice] = useState(0)
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | undefined>();
+  const [checkType, setCheckType] = useState("");
 
-  const {state: { service } ,createService} = useContext(ServicesContext)
+  const {
+    state: { service, loading },
+    createService,
+  } = useContext(ServicesContext);
 
-  const isValid = useRef({
-    name: false,
-    description: false,
-    type: false,
-    price: false
-  });
+  const initialValues = {
+    name: "",
+    description: "",
+    type: "",
+    price: 0,
+  };
 
-  const {name, description,type, form, onChange} = useForm({
-    name: '',
-    description: '',
-    type: ''
-  })
+  const validations = {
+    name: {
+      regexValidation: /^.+$/,
+      errorMessage: "Nombre es requerido",
+    },
+    description: {
+      regexValidation: /^.+$/,
+      errorMessage: "Descripcion es requerido",
+    },
+    type: {
+      regexValidation: /^.+$/,
+      errorMessage: "Tipo de servicio es requerido",
+    },
+    price: {
+      regexValidation: checkType === "price" ? /^[0-9]+$/ : /^.+$/,
+      errorMessage: "Precio es requerido",
+    },
+  };
 
-  const changeState = (name: string, value: boolean) => {
-    isValid.current = ({
-      ...isValid.current,
-      [name]: value
-    })
-  }
+  const onSubmit = async (value: RequestRootServiceInterface) => {
+    const { price, ...newValue } = value;
 
-  const onClick = () => {
-    if (isValid.current.name && isValid.current.description && isValid.current.type) {
+    const body: RequestRootServiceInterface = {
+      ...newValue,
+    };
 
-      if (type === 'price' && isValid.current.price) {
-        createService({...form, price, fatherServiceId: service?._id}, router)
-      } else if (type === 'subservice') {
-        createService({...form, fatherServiceId: service?._id}, router,)
-      }
-
+    if (newValue.type === "price") {
+      body.price = price;
     }
-  }
+
+    createService(
+      {
+        ...body,
+        image: file,
+        fatherServiceId: service?._id,
+      },
+      router
+    );
+  };
+
+  const { name, description, type, price, errors, onChange, handleSubmit } =
+    useForm(initialValues, validations, onSubmit);
+
+  const handleClickUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const localUrl = URL.createObjectURL(file);
+
+      setImagePreview(localUrl);
+      setFile(file);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      permissionsCategory.length &&
+      !hasPermission(["Service:*", "Service:create"])
+    ) {
+      router.push("/dashboard");
+    }
+  }, [permissionsCategory]);
 
   return (
-    <div className='pl-10 pr-10 pt-10 w-full flex flex-col h-3/4'>
-        <CustomCreationTitle title='Crear Subservicio'/>
-        
+    <div className={styles.pageCreateServiceContainer}>
+      {loading && <Loading />}
+
+      <div className={styles.formContainer}>
+        <CustomCreationTitle title="Crear Subservicio" />
         <div
-          className='grid gap-4 grid-cols-2 w-full mt-20'
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            flexDirection: "row",
+            gap: "1rem",
+            width: "100%",
+          }}
         >
           <div>
             <div
-              className='grid gap-4 grid-cols-2 w-full'
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "1rem",
+              }}
             >
-                <CustomInput
-                    label='Nombre del Servicio'
-                    name='name'
-                    type='text'
-                    value={name}
-                    patternMatch={/^[A-Za-z0-9 /]{2,}$$/}
-                    errorMessage='Solo se aceptan letras y numeros'
-                    setIsValid={changeState}
-                    onChange={(e) => onChange(e)}
-                />
-
-                <CustomInput
-                    label='Nombre del padre'
-                    name='parent'
-                    type='text'
-                    value={service?.name || ''}
-                    patternMatch={/^/}
-                    errorMessage=''
-                    setIsValid={changeState}
-                    onChange={() => {}}
-                    readonly
-                />
-            </div>
-
-            <br/>
-
-            <div
-              className='grid gap-4 grid-cols-2 w-full'
-            >
-              <CustomSelect
-                  label='Tipo de Servicio'
-                  name='type'
-                  value={type}
-                  items={optionSubService}
-                  onChange={(e) => {
-                    onChange(e)
-                    changeState('type', true)
-                  }}
+              <Input
+                label="Nombre del Servicio"
+                name="name"
+                type="text"
+                value={name}
+                errorMessage={errors.name}
+                onChange={(e) => onChange(e.target.value, "name")}
+                variants="bordered"
               />
-
-              {
-                type === 'price' 
-                && <CustomInput
-                    label='Precio'
-                    name='price'
-                    type='number'
-                    value={price.toString()}
-                    patternMatch={/^[1-9][0-9]*$/}
-                    errorMessage='Solo se aceptan numeros'
-                    setIsValid={changeState}
-                    onChange={(e) => setPrice(Number(e.target.value))}
-                />
-              }
+              <Input
+                label="Nombre del padre"
+                name="parent"
+                type="text"
+                value={service?.name || ""}
+                onChange={() => {}}
+                disabled
+                variants="bordered"
+              />
             </div>
 
-            <br/>
+            <br />
 
-            <CustomTextArea
-                label='Descripción'
-                name='description'
-                value={description}
-                errorMessage='Solo se aceptan letras y numeros'
-                patternMatch={/^[A-Za-z0-9 ]{2,}$/}
-                setIsValid={changeState}
-                onChange={(e) => onChange(e)}
+            <div className="grid gap-4 grid-cols-2 w-full">
+              <Select
+                value={serviceTypeEnum[type as keyof typeof serviceTypeEnum]}
+                onChange={(e) =>
+                  onChange(
+                    serviceTypeReverseEnum[
+                      e as keyof typeof serviceTypeReverseEnum
+                    ],
+                    "type"
+                  )
+                }
+                variants="bordered"
+                label="Tipo de Servicio"
+                errorMessage={errors.type}
+              >
+                {subserviceOptions.map(({ value, label }, index) => (
+                  <SelectItem key={index} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              {type === "price" && (
+                <Input
+                  label="Precio"
+                  name="price"
+                  type="number"
+                  value={price}
+                  errorMessage={errors.price}
+                  onChange={(e) => onChange(e.target.value, "price")}
+                  variants="bordered"
+                />
+              )}
+            </div>
+
+            <br />
+
+            <Input
+              label="Descripcion"
+              name="description"
+              type="text"
+              value={description}
+              errorMessage={errors.description}
+              onChange={(e) => onChange(e.target.value, "description")}
+              variants="bordered"
             />
-
           </div>
-
-          <div className='flex justify-center'>
+          <div className={styles.rightContainer}>
             <Image
-              src={'https://res.cloudinary.com/dnesdnfxy/image/upload/v1726873252/mastergas23/services/vczvh2friktamywhum3c.webp'}
+              src={imagePreview || ImageIcon}
               width={400}
               height={400}
               alt="image"
-              className="w-2/5"
+              className={styles.image}
+            />
+
+            <Button
+              label="Subir imagen"
+              className={styles.uploadButton}
+              onClick={handleClickUpload}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              hidden
+              onChange={handleFileChange}
             />
           </div>
-      
         </div>
-
-        <div
-          className='flex justify-end mt-10 items-end h-full'
-        >
-          <CustomButton
-            label='Crear'
-            type='button'
-            onClick={onClick}
-          />
+        <div className="flex justify-end mt-10 items-end h-full">
+          <Button label="Crear" type="button" onClick={handleSubmit} />
         </div>
+      </div>
 
-        <ToastContainer autoClose={2000}/>
+      <ToastContainer autoClose={2000} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

@@ -17,3 +17,4 @@ export { default as Pill } from "./Pill/Pill";
 export { default as Loading } from "./Loading/Loading";
 export { default as Select } from "./Select/Select";
 export { default as SelectItem } from "./Select/SelectItem";
+export { default as ConfirmationModal } from "./ConfirmationModal/ConfirmationModal";

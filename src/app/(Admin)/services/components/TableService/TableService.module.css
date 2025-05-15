@@ -1,0 +1,21 @@
+.actionsButton {
+    display: flex;
+    gap: 5px;
+}
+
+.tableContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttonRefresh {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  background-color: var(--refresh-color-button);
+}
+
+.buttonRefresh:hover {
+  background-color: var(--refresh-color-button-hover);
+}

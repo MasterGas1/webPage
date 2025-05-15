@@ -94,6 +94,13 @@ export const useForm = <T extends Object>(
     setTouched({} as Record<keyof T, boolean>);
   };
 
+  const setValuesForm = (values: Partial<T>) => {
+    setState({
+      ...state,
+      ...values,
+    });
+  };
+
   return {
     ...state,
     errors,
@@ -103,5 +110,6 @@ export const useForm = <T extends Object>(
     handleSubmit,
     resetForm,
     updateValues,
+    setValuesForm,
   };
 };
