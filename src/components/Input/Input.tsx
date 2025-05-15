@@ -17,6 +17,7 @@ const Input: React.FC<InputProps> = ({
   inputBackgroundColor,
   activeLabelColor,
   errorMessage,
+  disabled,
   onClear,
   onChange,
 }) => {
@@ -102,6 +103,7 @@ const Input: React.FC<InputProps> = ({
             setValueAux(e.target.value);
             onChange(e);
           }}
+          disabled={disabled}
         />
 
         {isClearable && value && value !== "" && (

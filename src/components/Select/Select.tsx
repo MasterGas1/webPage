@@ -20,6 +20,7 @@ interface SelectProps {
   variants?: "flat" | "bordered";
   value: string;
   fullWidth?: boolean;
+  errorMessage?: string;
   onChange: (value: string) => void;
 }
 const Select: FC<SelectProps> = ({
@@ -28,6 +29,7 @@ const Select: FC<SelectProps> = ({
   variants = "flat",
   value,
   fullWidth = true,
+  errorMessage,
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
@@ -39,55 +41,59 @@ const Select: FC<SelectProps> = ({
   };
 
   return (
-    <div
-      className={`${styles.selectContainer} ${
-        variants === "bordered" && styles.selectContainerBordered
-      }
+    <div>
+      <div
+        className={`${styles.selectContainer} ${
+          variants === "bordered" && styles.selectContainerBordered
+        }
         ${fullWidth && styles.fullWidth}  
       `}
-      onClick={() => {
-        setOpen(!open);
-        setFocused(!focused);
-      }}
-      onBlur={() => {
-        setFocused(false);
-        setOpen(false);
-      }}
-      tabIndex={0}
-    >
-      <div className={`${styles.selectWrapper} ${open ? styles.open : ""}`}>
-        {label && (
-          <label
-            className={`${styles.floatingLabel} ${
-              focused || value ? styles.floating : ""
-            }`}
-          >
-            {label}
-          </label>
-        )}
+        onClick={() => {
+          setOpen(!open);
+          setFocused(!focused);
+        }}
+        onBlur={() => {
+          setFocused(false);
+          setOpen(false);
+        }}
+        tabIndex={0}
+      >
+        <div className={`${styles.selectWrapper} ${open ? styles.open : ""}`}>
+          {label && (
+            <label
+              className={`${styles.floatingLabel} ${
+                focused || value ? styles.floating : ""
+              }`}
+            >
+              {label}
+            </label>
+          )}
 
-        <div className={styles.selectedValue}>
-          {value || (!label && "Select an option")}
+          <div className={styles.selectedValue}>
+            {value || (!label && "Select an option")}
+          </div>
         </div>
+
+        <IoChevronDownOutline
+          className={`${styles.icon} ${focused ? styles.rotate : ""}`}
+        />
+
+        {focused && (
+          <ul className={styles.selectDropdown}>
+            {Children.map(children, (child) => {
+              if (isValidElement(child)) {
+                return cloneElement(child as ReactElement<SelectItemProps>, {
+                  onSelect: handleSelect,
+                  selectedValue: value,
+                });
+              }
+              return null;
+            })}
+          </ul>
+        )}
       </div>
 
-      <IoChevronDownOutline
-        className={`${styles.icon} ${focused ? styles.rotate : ""}`}
-      />
-
-      {focused && (
-        <ul className={styles.selectDropdown}>
-          {Children.map(children, (child) => {
-            if (isValidElement(child)) {
-              return cloneElement(child as ReactElement<SelectItemProps>, {
-                onSelect: handleSelect,
-                selectedValue: value,
-              });
-            }
-            return null;
-          })}
-        </ul>
-      )}
+      {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
     </div>
   );
 };

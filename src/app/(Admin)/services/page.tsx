@@ -1,57 +1,69 @@
-'use client';
+"use client";
 
-import React, { useContext, useEffect, useState } from 'react'
-import { Context as ServicesContext } from '@/context/serviceContext';
-import Link from 'next/link';
+import React, { useContext, useEffect, useState } from "react";
+import { Context as ServicesContext } from "@/context/serviceContext";
+import Link from "next/link";
 import { IoAdd } from "react-icons/io5";
 
-import { ServicesInterface } from '@/interfaces/servicesInterface';
+import { ServicesInterface } from "@/app/(Admin)/services/interface/servicesInterface";
 
-import TableService from './components/TableService';
-import InfoService from './components/InfoService';
-import LinkList from './components/LinkList';
+import TableService from "./components/TableService/TableService";
+import InfoService from "./components/InfoService/InfoService";
+import LinkList from "./components/LinkList";
+import usePermission from "@/hook/usePermission";
+import { permissionsCategoryEnum } from "@/data/permissionCategory";
 
+import styles from "./page.module.css";
 
 const page = () => {
+  const { hasPermission } = usePermission(permissionsCategoryEnum.SERVICE);
 
-
-  const {state: { service, reload }, getServices } = useContext(ServicesContext);
- 
+  const {
+    state: { service, reload },
+    getServices,
+  } = useContext(ServicesContext);
 
   useEffect(() => {
     if (service === null || reload) {
-      getServices()
+      getServices();
     }
-  }, [])
+  }, []);
 
   return (
-    <div className='p-10 w-full flex flex-col justify-center'>
-      <div className='flex w-full justify-center mb-2'>
-        <h1 className='font-bold text-principal-color text-3xl'>Servicios</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.headerContainer}>
+        <h1>Servicios</h1>
       </div>
 
-      <LinkList/>
+      <LinkList />
 
-      {
-        service === null || service.type === 'root service' || service.type === 'subservice' 
-        ? <div className='flex w-full justify-end mb-2'>
-            <Link href={service === null ? '/services/createService' : `/services/createService/${service?._id}`} className='bg-principal-color text-white p-1 rounded-large'>
-              <IoAdd size={40} color='white' />
-            </Link>
-          </div>
-        : null
-      }
+      {(service === null ||
+        service.type === "root service" ||
+        service.type === "subservice") &&
+      hasPermission(["Service:*", "Service:create"]) ? (
+        <div className={styles.addButtonPosition}>
+          <Link
+            href={
+              service === null
+                ? "/services/createService"
+                : `/services/createService/${service?._id}`
+            }
+            className={styles.addButton}
+          >
+            <IoAdd size={30} color="white" />
+          </Link>
+        </div>
+      ) : null}
 
+      <InfoService />
 
-      <InfoService/>
-
-      {
-        service === null || service.type === 'root service' || service.type === 'subservice'
-        ? <TableService/>
-        : null
-      }
+      {service === null ||
+      service.type === "root service" ||
+      service.type === "subservice" ? (
+        <TableService />
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

@@ -1,231 +1,305 @@
-'use client'
+"use client";
 
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Spinner } from '@nextui-org/react';
-import Image from 'next/image'
-import { useRouter, useParams } from 'next/navigation'
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
 
-import {ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 
-import CustomCreationTitle from '@/components/CustomCreationTitle'
-import CustomInput from '@/components/CustomInput'
-import CustomSelect from '@/components/CustomSelect'
-import CustomTextArea from '@/components/CustomTextArea'
-import CustomButton from '@/components/CustomButton'
+import {
+  Button,
+  Input,
+  Loading,
+  Select,
+  SelectItem,
+  Spinner,
+} from "@/components";
+import CustomCreationTitle from "@/components/CustomCreationTitle";
 
-import { serviceAvailableOptions, serviceOptions } from '@/data/selectOptionData'
+import { availableOptions } from "@/data/serviceEnum";
 
-import { Context as ServicesContext } from '@/context/serviceContext';
+import { Context as ServicesContext } from "@/context/serviceContext";
+
+import styles from "./page.module.css";
+
+import { useForm } from "@/hook/useForm";
+
+import { RequestRootServiceInterface } from "../../interface/servicesInterface";
+import usePermission from "@/hook/usePermission";
+import { permissionsCategoryEnum } from "@/data/permissionCategory";
 
 const page = () => {
+  const {
+    state: { service, loading },
+    updateService,
+    getInfoService,
+  } = useContext(ServicesContext);
 
-  const {state: {service} , updateService, getInfoService} = useContext(ServicesContext)
-  
-  const router = useRouter()
-  const { id } = useParams()
+  const { hasPermission, permissionsCategory } = usePermission(
+    permissionsCategoryEnum.SERVICE
+  );
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [price, setPrice] = useState(0)
-  const [form, setForm] = useState({
-    name: '',
-    description: '',
-    type: '',
-    available: ''
-  })
+  const router = useRouter();
+  const { id } = useParams();
 
-  const {name, description, type, available } = form
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | undefined>();
+  const [checkType, setCheckType] = useState("");
 
+  const initialValues = {
+    name: "",
+    description: "",
+    type: "",
+    available: "",
+    price: 0,
+  };
 
+  const validations = {
+    name: {
+      regexValidation: /^.+$/,
+      errorMessage: "Nombre es requerido",
+    },
+    description: {
+      regexValidation: /^.+$/,
+      errorMessage: "Descripcion es requerido",
+    },
+    type: {
+      regexValidation: /^.+$/,
+      errorMessage: "Tipo de servicio es requerido",
+    },
+    price: {
+      regexValidation: checkType === "root service price" ? /^[0-9]+$/ : /^.+$/,
+      errorMessage: "Precio es requerido",
+    },
+  };
 
-  const isValid = useRef({
-    name: true,
-    description: true,
-    price: true,
-    available: false
-  });
+  const onSubmit = (value: RequestRootServiceInterface) => {
+    const { price, ...newValue } = value;
 
+    if (newValue.type === "root service price" || newValue.type === "price") {
+      updateService(
+        id.toString(),
+        { ...newValue, price, image: file ?? undefined },
+        router
+      );
+    } else {
+      updateService(
+        id.toString(),
+        { ...newValue, image: file ?? undefined },
+        router
+      );
+    }
+  };
 
-
-  const changeState = (name: string, value: boolean) => {
-    isValid.current = ({
-      ...isValid.current,
-      [name]: value
-    })
-  }
+  const {
+    name,
+    type,
+    price,
+    description,
+    available,
+    errors,
+    onChange,
+    setValuesForm,
+    handleSubmit,
+  } = useForm(initialValues, validations, onSubmit);
 
   useEffect(() => {
-    getInfoService(id.toString());
-  },[])
-
+    if (service === null) {
+      getInfoService(id.toString());
+    }
+  }, []);
 
   useEffect(() => {
     if (service) {
-      setForm({
+      setValuesForm({
         name: service.name,
         description: service.description,
         type: service.type,
-        available: service.available
-      })
-
-      if (service.type === 'root service price' || service.type === 'price') {
-        setPrice(service.price || 0)
-      }
+        available: service.available,
+        price: service.price,
+      });
+      setImagePreview(service.image);
+      setCheckType(service.type);
     }
-  },[service])
+  }, [service]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    })
-  }
+  const handleClickUpload = () => {
+    fileInputRef.current?.click();
+  };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const localUrl = URL.createObjectURL(file);
 
-  const onClick = () => {
-    if (isValid.current.name && isValid.current.description) {
-
-      if ((type === 'root service price' || type === 'price') && isValid.current.price) {
-        updateService(id.toString(), {...form, price}, router)
-      } else if (type === 'root service' || type === 'subservice') {
-        updateService(id.toString(), form, router)
-      } 
-
+      setImagePreview(localUrl);
+      setFile(file);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (!hasPermission(["Service:*", "Service:update"])) {
+      router.push("/dashboard");
+    }
+  }, [permissionsCategory]);
 
   return (
-    <div className='pl-10 pr-10 pt-10 w-full flex flex-col h-3/4'>
-        <CustomCreationTitle title='Editar Servicio'/>
-        {
-            service !== null  
-            ?<>
+    <div className={styles.pageCreateServiceContainer}>
+      {loading && <Loading />}
+      <div className={styles.formContainer}>
+        <CustomCreationTitle title="Editar Servicio" />
+        {service !== null ? (
+          <>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                flexDirection: "row",
+                gap: "1rem",
+                width: "100%",
+              }}
+            >
+              <div>
                 <div
-                className='grid gap-4 grid-cols-2 w-full mt-20'
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "1rem",
+                  }}
                 >
-                    <div>
-                        <div
-                        className='grid gap-4 grid-cols-2 w-full'
-                        >
-                            <CustomInput
-                                label='Nombre del Servicio'
-                                name='name'
-                                type='text'
-                                value={name}
-                                patternMatch={/^[A-Za-z0-9 /]{2,}$$/}
-                                errorMessage='Solo se aceptan letras y numeros'
-                                setIsValid={changeState}
-                                onChange={(e) => onChange(e)}
-                            />
+                  <Input
+                    label="Nombre del Servicio"
+                    name="name"
+                    type="text"
+                    value={name}
+                    errorMessage={errors.name}
+                    onChange={(e) => onChange(e.target.value, "name")}
+                    variants="bordered"
+                  />
 
-                            {
-                                service.fatherServiceId !== undefined
-                                && <CustomInput
-                                    label='Servicio Padre'
-                                    name='fatherServiceId'
-                                    type='text'
-                                    value={service.fatherServiceId.name}
-                                    patternMatch={/^/}
-                                    errorMessage=''
-                                    setIsValid={changeState}
-                                    readonly
-                                    onChange={(e) => onChange(e)}
-                                />
-                            }
-                        </div>
-
-                        <br/>
-
-                        <div
-                        className='grid gap-4 grid-cols-2 w-full'
-                        >
-                        <CustomInput
-                            label='Tipo de Servicio'
-                            name='type'
-                            value={type === 'root service' ? 'Servicio principal'
-                              : type === 'subservice' ? 'Subservicio'
-                              : type === 'price' ? 'Precio'
-                              : 'Servicio principal precio'
-                            }
-                            readonly={true}
-                            onChange={(e) => {}}
-                            setIsValid={() => {}}
-                            errorMessage=''
-                            patternMatch={/^/}
-                            type='text'
-                        />
-
-                        {
-                            type === 'root service price' 
-                            && <CustomInput
-                                label='Precio'
-                                name='price'
-                                type='number'
-                                value={price.toString()}
-                                patternMatch={/^[1-9][0-9]*$/}
-                                errorMessage='Solo se aceptan numeros'
-                                setIsValid={changeState}
-                                onChange={(e) => setPrice(Number(e.target.value))}
-                            />
-                        }
-                        </div>
-
-                        <br/>
-
-                        <CustomSelect
-                            label='Disponible'
-                            name='available'
-                            value={available}
-                            items={serviceAvailableOptions}
-                            defaultValue={service?.available}
-                            onChange={(e) => onChange(e)}
-                        />
-
-                        <br/>
-
-                        <br/>
-
-                        <CustomTextArea
-                            label='Descripción'
-                            name='description'
-                            value={description}
-                            errorMessage='Solo se aceptan letras y numeros'
-                            patternMatch={/^[A-Za-z0-9 ]{2,}$/}
-                            setIsValid={changeState}
-                            onChange={(e) => onChange(e)}
-                        />
-                </div>
-
-                <div className='flex justify-center'>
-                    <Image
-                        src={'https://res.cloudinary.com/dnesdnfxy/image/upload/v1726873252/mastergas23/services/vczvh2friktamywhum3c.webp'}
-                        width={400}
-                        height={400}
-                        alt="image"
-                        className="w-2/5"
+                  {service.fatherServiceId !== undefined && (
+                    <Input
+                      label="Nombre del padre"
+                      name="parent"
+                      type="text"
+                      value={service?.name || ""}
+                      onChange={() => {}}
+                      disabled
+                      variants="bordered"
                     />
+                  )}
                 </div>
-            
-                </div>
+
+                <br />
 
                 <div
-                className='flex justify-end mt-10 items-end h-full'
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "1rem",
+                    width: "100%",
+                  }}
                 >
-                <CustomButton
-                    label='Guardar'
-                    type='button'
-                    onClick={onClick}
-                />
+                  <Input
+                    label="Tipo de Servicio"
+                    name="type"
+                    type="text"
+                    value={
+                      type === "root service"
+                        ? "Servicio principal"
+                        : type === "subservice"
+                        ? "Subservicio"
+                        : type === "price"
+                        ? "Precio"
+                        : "Servicio principal precio"
+                    }
+                    onChange={() => {}}
+                    disabled
+                    variants="bordered"
+                  />
+
+                  {type === "root service price" ||
+                    (type === "price" && (
+                      <Input
+                        label="Precio"
+                        name="price"
+                        type="number"
+                        value={price}
+                        errorMessage={errors.price}
+                        onChange={(e) => onChange(e.target.value, "price")}
+                        variants="bordered"
+                      />
+                    ))}
                 </div>
 
-                <ToastContainer autoClose={2000}/>
-            </>
-        :   <div className="flex w-full h-full items-center justify-center flex-1 absolute">
-                <Spinner color='success'/>
-            </div>
-        }
-       
-    </div>
-  )
-}
+                <br />
+                <Select
+                  label="Disponibilidad"
+                  value={available ? "Disponible" : "No disponible"}
+                  errorMessage={errors.available}
+                  onChange={(e) =>
+                    onChange(e === "Disponible" ? true : false, "available")
+                  }
+                  variants="bordered"
+                >
+                  {availableOptions.map((option) => (
+                    <SelectItem value={option.value} key={option.label}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <br />
 
-export default page
+                <Input
+                  label="Descripcion"
+                  name="description"
+                  type="text"
+                  value={description}
+                  errorMessage={errors.description}
+                  onChange={(e) => onChange(e.target.value, "description")}
+                  variants="bordered"
+                />
+              </div>
+
+              <div className={styles.rightContainer}>
+                <Image
+                  src={imagePreview ?? ""}
+                  width={400}
+                  height={400}
+                  alt="image"
+                  className="w-2/5"
+                />
+                <Button
+                  label="Subir imagen"
+                  className={styles.uploadButton}
+                  onClick={handleClickUpload}
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  hidden
+                  onChange={handleFileChange}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-10 items-end h-full">
+              <Button label="Guardar" onClick={handleSubmit} />
+            </div>
+
+            <ToastContainer autoClose={2000} />
+          </>
+        ) : (
+          <div className={styles.spinnerContainer}>
+            <Spinner />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default page;
