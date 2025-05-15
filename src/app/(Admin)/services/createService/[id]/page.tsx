@@ -65,7 +65,7 @@ const page = () => {
       errorMessage: "Tipo de servicio es requerido",
     },
     price: {
-      regexValidation: checkType === "price" ? /^[0-9]+$/ : /^.+$/,
+      regexValidation: checkType === "price" ? /^[0-9.]+$/ : /^.+$/,
       errorMessage: "Precio es requerido",
     },
   };
