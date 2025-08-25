@@ -1,5 +1,5 @@
 import { IoBarChart, IoBasket, IoPerson } from "react-icons/io5";
-import { FaBuilding } from "react-icons/fa";
+import { FaBuilding, FaUserPlus } from "react-icons/fa";
 import styles from "@/app/(Admin)/components/ItemSideMenu/ItemSideMenu.module.css";
 
 import { permissionsCategoryEnum } from "./permissionCategory";
@@ -35,6 +35,12 @@ const sideMenuData: ItemSideMenu[] = [
     href: "/installers",
     category: permissionsCategoryEnum.INSTALLER,
     icon: <IoPerson className={styles.icon} />,
+  },
+  {
+    name: "Roles",
+    href: "/roles",
+    category: permissionsCategoryEnum.ROLE,
+    icon: <FaUserPlus className={styles.icon} />,
   },
 ];
 

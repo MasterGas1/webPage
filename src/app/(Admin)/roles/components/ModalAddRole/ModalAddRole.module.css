@@ -1,0 +1,9 @@
+.formAddRoleContainer{
+    width: 30vw;
+}
+
+.buttonsFormAddRole {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

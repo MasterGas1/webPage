@@ -1,0 +1,31 @@
+.pageRoleContainer {
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;   
+    width: 100%;
+}
+
+.pageRoleContainer .titleContainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pageRoleContainer .titleContainer h1 {
+    color: var(--principal-color);
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.addButtonPosition {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.addButton {
+    border-radius: 10px;
+}
