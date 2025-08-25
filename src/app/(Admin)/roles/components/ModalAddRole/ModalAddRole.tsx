@@ -44,7 +44,13 @@ const ModalAddRole: FC<ModalAddRoleInterface> = ({
   };
 
   const onSubmit = (body: AddRoleInterface) => {
-    addRole(body);
+    try {
+      addRole(body);
+      resetForm();
+      onOpenChange();
+    } catch (error) {
+
+    }
   };
 
   const { name, description, errors, onChange, resetForm, handleSubmit } =

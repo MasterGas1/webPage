@@ -20,10 +20,11 @@ import useRoles from "./hook/useRoles";
 import Link from "next/link";
 
 import ModalAddRole from "./components/ModalAddRole/ModalAddRole";
+import { ToastContainer } from "react-toastify";
 
 const page = () => {
   const { roles, isLoading, addRole } = useRoles();
-  const [isOpenModalAddRole, setIsOpenModalAddRole] = useState(true);
+  const [isOpenModalAddRole, setIsOpenModalAddRole] = useState(false);
 
   return (
     <div className={styles.pageRoleContainer}>
@@ -69,7 +70,7 @@ const page = () => {
                     icon={<IoTrashOutline size={20} />}
                     disabled={!role.isEditable}
                     backgroundColor="secondary"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   />
                 </TableCell>
               </TableRow>
@@ -77,6 +78,9 @@ const page = () => {
           </TableBody>
         </Table>
       )}
+      <ToastContainer
+        autoClose={2000}
+      />
     </div>
   );
 };
